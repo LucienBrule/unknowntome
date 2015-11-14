@@ -14,15 +14,29 @@ app.get('/', function (req, res) {
 // accept POST request on the homepage
 app.post('/', function (req, res) {
   res.send('Got a POST request');
-  console.log("User %s attempted to POST",req.connection.remoteAddress)
-  
+  console.log("User %s attempted to POST",req.connection.remoteAddress);
+});
+
+app.post('/quirk/id', function (req, res) {
+  res.send('Got a POST request');
+  console.log("User %s attempted to POST",req.connection.remoteAddress);
+  for (var i = 0; i <= quirkobjects.length; i++) {
+    console.log(quirkobjects[i]);
+    if(quirkobjects[i]["title"] == req.query.title){
+      if(quirkobjects[i]["geoLoc"] == "fillme"){
+              quirkobjects[i]["geoLoc"] = req.query.geoLoc;
+      };
+    };
+  };
 });
 
 // accept PUT request at /user
 app.put('/quirk', function (req, res) {
   res.send('Got a PUT request at /user');
   console.log("User %s attempted to PUT at /user",req.connection.remoteAddress);
-  var myquirk = new quirk("title", "geoLoc", "sentiment", "description", "numReviews", "specialAccess");
+  var myquirk = new quirk(req.query.title,req.query.geoloc,
+                          req.query.sentiment,req.query.description,
+                          req.query.numReviews,req.query.specialAccess);
   quirkobjects.push(myquirk);
 });
 
