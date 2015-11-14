@@ -110,7 +110,21 @@
       }
     }
 
+      var xmlhttp = new XMLHttpRequest(), json;
+
+      xmlhttp.onreadystatechange = function()
+      {
+        if (xmlhttp.readyState === 4 && xmlhttp.status === 200)
+        {
+          json = JSON.parse(xmlhttp.responseText);
+        }
+      };
+
+      xmlhttp.open('GET', 'defaultquirks.json', true);
+      xmlhttp.send();
+
       var map;
+      var markers;
 
       function initMap(position) {
       map = new google.maps.Map(document.getElementById('map'), {
@@ -118,26 +132,32 @@
       zoom: 10
       });
 
-       var infowindow = new google.maps.InfoWindow(
-       {
-          content: "THIS IS A TEST!"
-       });
-
-      var marker = new google.maps.Marker(
+      for (var i = 0; i < json.length; i++)
       {
-          position: {lat: 42.730635, lng: -73.684008},
-          map: map,
-          title: 'Hello World!'
-      });
+        var location  = json[i].geoloc.toString().split(',')
+        var latitude = +location[0].toString();
+        var longitude = +location[1].toString();
+        
+        infoWindow = new google.maps.InfoWindow({ content: json[i].title.toString() });
 
-       marker.addListener('click', function() 
-       {
-          infowindow.open(map, marker);
-       });
+        var marker = new google.maps.Marker(
+        {
+            position: {lat: latitude, lng: longitude},
+            map: map,
+            info: json[i].title.toString()
+        });
+
+        google.maps.event.addListener( marker, 'click', function() 
+        {
+            infoWindow.setContent( this.info );
+            infoWindow.open( map, this );
+        });
+      }
+         
     }
 
     </script>
 
-    <script async defer src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&callback=initMap"> </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?v=3.exp&callback=initMap"> </script>
   </body>
 </html>
