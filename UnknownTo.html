@@ -75,24 +75,31 @@
 
       #madeBy
       {
-        float:right;
-        margin-right: 3px;
+        position:absolute;
+        bottom:5px;
+        text-align: center;
+        width:100%;
         font-size:25px;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 25px;
+        color: #FFFFFF;
+        text-shadow: 1px 1px #000000;
       }
 
       #map 
       {   
         position: absolute;
-        bottom: 0px;
+        top: 35px;
         width:100%;
-        height: 95%; 
+        height: 90%; 
       }
 
     </style>
   </head>
 
   <body onload="getLocation()">
-    <div id = "header">UNKNOWN TO <div id ="madeBy">Made with <span style="color:#e74c3c;">&hearts;</span> for HACK RPI</div></div>
+    <div id = "header">UNKNOWN TO </div>
+    <center><div id ="madeBy">Made with <span style="color:#e74c3c;">&hearts;</span> for HACK RPI</div></center>
     <center><div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div></center>
     <div id="map"></div>
 
