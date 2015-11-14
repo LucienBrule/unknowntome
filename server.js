@@ -3,12 +3,13 @@ var app = express();
 var quirk = require('./quirk')
 var webpage = "<"
 var defaultquirks = require('./defaultquirks')
+// var mainview = require('Unkn')
 // var dynamicquirks = require('./dynamicquirks')
 var quirkobjects = []
 
 // respond with "Hello World!" on the homepage
 app.get('/', function (req, res) {
-  res.send('Hello World!');
+  res.sendFile('UnknownTo.html')
   console.log("User %s attempted to GET",req.connection.remoteAddress)
 });
 
