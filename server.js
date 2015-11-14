@@ -1,6 +1,9 @@
 var express = require('express');
 var app = express();
+var quirk = require('./quirk')
 var webpage = "<"
+
+var quirkobjects = []
 
 // respond with "Hello World!" on the homepage
 app.get('/', function (req, res) {
@@ -16,10 +19,11 @@ app.post('/', function (req, res) {
 });
 
 // accept PUT request at /user
-app.put('/user', function (req, res) {
+app.put('/quirk', function (req, res) {
   res.send('Got a PUT request at /user');
-  console.log("User %s attempted to PUT at /user",req.connection.remoteAddress)
-
+  console.log("User %s attempted to PUT at /user",req.connection.remoteAddress);
+  var myquirk = new quirk("title", "geoLoc", "sentiment", "description", "numReviews", "specialAccess");
+  quirkobjects.push(myquirk);
 });
 
 // accept DELETE request at /user
@@ -27,6 +31,12 @@ app.delete('/user', function (req, res) {
   res.send('Got a DELETE request at /user');
   console.log("User %s attempted to DELETE at /user",req.connection.remoteAddress)
 
+});
+
+//do locations get
+app.get('/quirks', function (req, res) {
+  console.log("User %s attempted to GET",req.connection.remoteAddress)
+  res.send(quirkobjects);
 });
 
 var server = app.listen(3000, function () {

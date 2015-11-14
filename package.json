@@ -1,0 +1,23 @@
+{
+  "name": "unknowntome",
+  "version": "0.0.0",
+  "description": "backend implementation",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LucienBrule/unknowntome.git"
+  },
+  "author": "Lucien Brule , Max Wang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LucienBrule/unknowntome/issues"
+  },
+  "homepage": "https://github.com/LucienBrule/unknowntome#readme",
+  "dependencies": {
+    "express": "^4.13.3"
+  }
+}
