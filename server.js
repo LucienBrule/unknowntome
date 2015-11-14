@@ -1,22 +1,16 @@
 var express = require('express');
 var app = express();
-var quirk = require('./quirk')
-var webpage = "<"
-var defaultquirks = require('./defaultquirks')
-// var mainview = require('Unkn')
-// var dynamicquirks = require('./dynamicquirks')
-var quirkobjects = []
+var fs = require('fs');
+var quirk = require('./quirk');
+var defaultquirks = require('./defaultquirks');
+var dynamicquirks = require('./dynamicquirks');
+var webpage = "<";
+var quirkobjects = [];
 
-// respond with "Hello World!" on the homepage
+//Serves the webpage
 app.get('/', function (req, res) {
-  res.sendFile('UnknownTo.html')
+  res.sendfile('UnknownTo.html')
   console.log("User %s attempted to GET",req.connection.remoteAddress)
-});
-
-// accept POST request on the homepage
-app.post('/', function (req, res) {
-  res.send('Got a POST request');
-  console.log("User %s attempted to POST",req.connection.remoteAddress);
 });
 
 app.post('/quirk/id', function (req, res) {
@@ -33,7 +27,7 @@ app.post('/quirk/id', function (req, res) {
   };
 });
 
-// accept PUT request at /user
+// Accepts a submission of a new quirk
 app.put('/quirk', function (req, res) {
   res.send('Got a PUT request at /user');
   console.log("User %s attempted to PUT at /user",req.connection.remoteAddress);
@@ -43,22 +37,37 @@ app.put('/quirk', function (req, res) {
   quirkobjects.push(myquirk);
 });
 
-// accept DELETE request at /user
-app.delete('/user', function (req, res) {
-  res.send('Got a DELETE request at /user');
+// accept DELETE request at /quirk/id
+app.delete('/user/id', function (req, res) {
+  res.send('Got a DELETE request at /user/id');
   console.log("User %s attempted to DELETE at /user",req.connection.remoteAddress)
-
+  for (var i = 0; i < quirkobjects.length; i++) {
+    if(quirkobjects[i]['title'] == req.query.title){
+      quirkobjects.splice(i,1);
+    }
+  }
 });
 
-//do locations get
+//Respond with the current quirk list
 app.get('/quirks', function (req, res) {
   console.log("User %s attempted to GET",req.connection.remoteAddress)
   res.send(quirkobjects);
 });
 
+//start the server , the entry point is here.
 var server = app.listen(3000, function () {
   var host = server.address().address;
   var port = server.address().port;
+  var stdin = process.openStdin();
+  stdin.addListener("data", function(d){
+    if(d.toString().trim() == "wq"){
+      console.log("quitting...");
+      fs.appendFile("./dynamicquirks.json", JSON.stringify(quirkobjects), function(err){
+        console.log("Save successfull");
+      });
+      process.exit(0);
+    }
+  });
   quirkobjects = defaultquirks
 
   console.log('Example app listening at http://%s:%s', host, port);
