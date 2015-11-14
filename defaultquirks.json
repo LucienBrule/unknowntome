@@ -1,0 +1,58 @@
+[
+  {
+    "title": "Louis Rubin Memorial Approach",
+    "geoloc": "42.730635, -73.684008",
+    "sentiment": "sentiment",
+    "description": "Built following the fire that destroyed Rensselaer's main building, The Approach overlooks Troy and represents a symbolic link between the City of Troy and Rensselaer Polytechnic Institute.",
+    "numreviews": "numreviews",
+    "specialaccess": "None"
+  },
+  {
+    "title": "DCC Tech Dump",
+    "geoloc": "42.729117,-73.679353",
+    "sentiment": "sentiment",
+    "description": "Frequently used, old printers and toner.",
+    "numreviews": "numreviews",
+    "specialaccess": "None"
+  },
+  {
+    "title": "Low/CII Tech Dump",
+    "geoloc": "42.729481,-73.678493",
+    "sentiment": "sentiment",
+    "description": "Frequently used, lots of decade old equipment.",
+    "numreviews": "numreviews",
+    "specialaccess": "None"
+  },
+  {
+    "title": "Union Tech Dump",
+    "geoloc": "42.729865,-73.676471",
+    "sentiment": "sentiment",
+    "description": "Right outside elevator in garage. Working PC found once in a while.",
+    "numreviews": "numreviews",
+    "specialaccess": "None"
+  },
+  {
+    "title": "JEC Tech Dump",
+    "geoloc": "42.729506,-73.680085",
+    "sentiment": "sentiment",
+    "description": "Most used tech dump. Lots of toners and printers, lot of old CRTs and other things.",
+    "numreviews": "numreviews",
+    "specialaccess": "None"
+  },
+  {
+    "title": "MILL Lab",
+    "geoloc": "42.729788,-73.679556",
+    "sentiment": "sentiment",
+    "description": "Manufacturing learning environment with industry-grade equipment.",
+    "numreviews": "numreviews",
+    "specialaccess": "None but requires instructor presence."
+  },
+  {
+    "title": "The Whale",
+    "geoloc": "42.729402,-73.677903",
+    "sentiment": "sentiment",
+    "description": "A cute place to take a date. When you speak into the turret, the shape of it echoes what you say with a 1 second delay.",
+    "numreviews": "numreviews",
+    "specialaccess": "None"
+  }
+]

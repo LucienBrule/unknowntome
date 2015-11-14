@@ -1,18 +1,18 @@
 	
-function Quirk(title, geoLoc, sentiment, description, numReviews, specialAccess) {
+function Quirk(title, geoloc, sentiment, description, numreviews, specialaccess) {
 
 		if (typeof(title)==='undefined') title = "fillme";
-		if (typeof(geoLoc)==='undefined') geoLoc = "fillme";
+		if (typeof(geoloc)==='undefined') geoLoc = "fillme";
 		if (typeof(sentiment)==='undefined') sentiment = "fillme";
 		if (typeof(description)==='undefined') description = "fillme";
-		if (typeof(numReviews)==='undefined') numReviews = "fillme";
-		if (typeof(specialAccess)==='undefined') specialAccess = "fillme";
+		if (typeof(numreviews)==='undefined') numreviews = "fillme";
+		if (typeof(specialaccess)==='undefined') specialaccess = "fillme";
 
 		this.title = title;
-		this.geoLoc = geoLoc;
+		this.geoloc = geoloc;
 		this.sentiment = sentiment;
 		this.description = description;
-		this.numReviews = numReviews;
-		this.specialAccess = specialAccess;
+		this.numreviews = numreviews;
+		this.specialaccess = specialaccess;
 };
 module.exports = Quirk;
