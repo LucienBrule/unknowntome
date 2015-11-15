@@ -7,6 +7,7 @@ function Quirk(title, geoloc, sentiment, description, numreviews, specialaccess)
 		if (typeof(description)==='undefined') description = "fillme";
 		if (typeof(numreviews)==='undefined') numreviews = "fillme";
 		if (typeof(specialaccess)==='undefined') specialaccess = "fillme";
+		if (typeof(specialaccess)==='undefined') specialaccess = "fillme";
 
 		this.title = title;
 		this.geoloc = geoloc;
