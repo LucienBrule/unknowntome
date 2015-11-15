@@ -32,7 +32,7 @@ app.get('/', function (req, res) {
      res.sendfile('./public/index.html');
 });
 
-app.get('/defaultquirks.json', function(req, res))
+app.get('/defaultquirks.json', function(req, res)
 {
   res.sendfile('./defaultquirks.json');
 });
