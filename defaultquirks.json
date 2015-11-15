@@ -53,6 +53,7 @@
     "sentiment": "sentiment",
     "description": "A cute place to take a date. When you speak into the turret, the shape of it echoes what you say with a 1 second delay.",
     "numreviews": "numreviews",
-    "specialaccess": "None"
+    "specialaccess": "None",
+    "img": "./img/The Whale"
   }
 ]
