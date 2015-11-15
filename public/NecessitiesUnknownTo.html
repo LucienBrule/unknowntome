@@ -96,24 +96,25 @@
     
     function getLocation()
     {
-    if (navigator.geolocation)
-    {
-    navigator.geolocation.getCurrentPosition(initMap);
-    }
-    else
-    {
-    prompt("Geolocation is not supported by this browser.");
-    }
-    }
-    var xmlhttp = new XMLHttpRequest(), json;
-    xmlhttp.onreadystatechange = function()
-    {
-    if (xmlhttp.readyState === 4 && xmlhttp.status === 200)
-    {
-    json = JSON.parse(xmlhttp.responseText);
-    }
-    };
-    xmlhttp.open('GET', 'defaultquirks.json', true);
+        if (navigator.geolocation)
+        {
+            navigator.geolocation.getCurrentPosition(initMap);
+        }
+        else
+        {
+        prompt("Geolocation is not supported by this browser.");
+        }
+        }
+      var xmlhttp = new XMLHttpRequest(), json;
+
+      xmlhttp.onreadystatechange = function()
+      {
+        if (xmlhttp.readyState === 4 && xmlhttp.status === 200)
+        {
+          json = JSON.parse(xmlhttp.responseText);
+        }
+      };
+    xmlhttp.open('GET', 'http://localchost:3000/quirks/all', true);
     xmlhttp.send();
     var map;
     var markers;
@@ -165,6 +166,8 @@
     });
     p1line.setMap(map);
     p2line.setMap(map);
+
+    parkingcoords = 
     
     }
     </script>

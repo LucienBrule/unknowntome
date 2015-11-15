@@ -26,9 +26,14 @@ var meetinglocations = new Datastore({ filename: __dirname + '/nedbs/meetingloca
 
 var webpage = "<";
 
+
 //Serves the webpage
 app.get('/', function (req, res) {
-  res.send("This port is running an instance of unknownto");
+  var hostname = req.headers.host.split(":")[0];
+  if(hostname.slice(0,6) == "quirks")
+    res.sendfile('./public/UnknownTo.html');
+  else 
+    res.sendfile('./public/NecessitiesUnknownTo.html');
   console.log("User %s attempted to GET",req.connection.remoteAddress)
 });
 
