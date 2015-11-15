@@ -2,16 +2,19 @@ var express = require('express');
 var app = express();
 var fs = require('fs');
 var quirk = require('./quirk');
-var defaultquirks = require('./defaultquirks');
+var defaultquirks = require('./public/defaultquirks');
 var dynamicquirks = require('./dynamicquirks');
 var webpage = "<";
 var quirkobjects = [];
 
 //Serves the webpage
 app.get('/', function (req, res) {
-  res.sendfile('UnknownTo.html')
+  res.send("This port is running an instance of unknownto");
   console.log("User %s attempted to GET",req.connection.remoteAddress)
 });
+
+//Host the static webpage
+app.use(express.static('./public'));
 
 app.post('/quirk/id', function (req, res) {
   res.send('Got a POST request');
