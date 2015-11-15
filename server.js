@@ -3,6 +3,8 @@ var express = require('express');
 var app = express();
 var fs = require('fs');
 var Datastore = require('nedb')
+var sentiment = require('sentiment');
+
 
 var quirk = require('./js/quirk');
 var parking = require('./js/parking')
@@ -64,8 +66,12 @@ app.get('quirks/bysentiment',function (req, res) {
     res.send(JSON.stringify(docs));
   });
 });
-app.post('/quirk', function (req, res) {
-  quirks.update({title: req.query.title},{geoloc:req.query.geoloc});
+app.put('/quirk/comment', function (req, res) {
+ res.send("OK")
+ quirks.find({title:req.query.title},function(err,docs){
+  var mysent = String(parseInt(docs.sentiment) + parseInt(sentiment(req.query.comment))/2);
+  quirks.update({title: req.query.title},{$set:{sentiment:mysent}});
+  });
 });
 app.delete('/quirk/id', function (req, res) {
   db.remove({_id:res.query._id},function (err, numRemoved) {
@@ -223,8 +229,6 @@ var server = app.listen(3000, function () {
   var host = server.address().address;
   var port = server.address().port;
   var stdin = process.openStdin();
-  console.log(defaultquirks);
-  console.log(defaultparkingspots);
   quirks.insert(defaultquirks, function (err, newDocs) {
   });
   parkingspots.insert(defaultparkingspots, function (err, newDocs) {
@@ -237,9 +241,6 @@ var server = app.listen(3000, function () {
   });
 
   quirks.find({_id : "01"},function(err,docs){
-    console.log(JSON.stringify(docs));
-  });
-  quirks.find({},function(err,docs){
     console.log(JSON.stringify(docs));
   });
   parkingspots.find({_id : "01"},function(err,docs){
