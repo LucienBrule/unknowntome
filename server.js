@@ -29,13 +29,21 @@ var webpage = "<";
 
 //Serves the webpage
 app.get('/', function (req, res) {
-  var hostname = req.headers.host.split(":")[0];
-  if(hostname.slice(0,6) == "quirks")
-    res.sendfile('./public/UnknownTo.html');
-  else 
-    res.sendfile('./public/NecessitiesUnknownTo.html');
-  console.log("User %s attempted to GET",req.connection.remoteAddress)
+     res.sendfile('./public/index.html');
 });
+
+app.get('/defaultquirks.json', function(req, res))
+{
+  res.sendfile('./defaultquirks.json');
+});
+// app.get('/', function (req, res) {
+//   var hostname = req.headers.host.split(":")[0];
+//   if(hostname.slice(0,6) == "quirks")
+//     res.sendfile('./public/UnknownTo.html');
+//   else 
+//     res.sendfile('./public/NecessitiesUnknownTo.html');
+//   console.log("User %s attempted to GET",req.connection.remoteAddress)
+// });
 
 //Host the static webpage
 app.use(express.static('./public'));
