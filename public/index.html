@@ -170,6 +170,7 @@ function initialize() {
     var myOptions = {
         center: latLng,
         zoom: 16,
+        maxZoom:20,
         mapTypeControlOptions: {
             mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'map_style']
         }
@@ -212,6 +213,10 @@ function initialize() {
         putOnMap(data)
     }
     );
+    $.getJSON("/api/parkingspots/all", function(data) {
+    putParkingOnMap(data)
+    }
+    );
     $.getJSON("/api/bathrooms/all", function(data) {
         putOnMap(data)
     }
@@ -224,12 +229,52 @@ function initialize() {
         putOnMap(data)
     }
     );
+
     
     var markers;
-    
+    function putParkingOnMap(json){
+        for (var i = 0; i < json.length; i++) 
+        {
+            var location = json[i].start.toString().split(',')
+            var latitude1 = +location[0].toString();
+            var longitude1 = +location[1].toString();
+
+            var location = json[i].stop.toString().split(',')
+            var latitude2 = +location[0].toString();
+            var longitude2 = +location[1].toString();
+            var linepoints = [
+                {lat: latitude1, lng: longitude1},
+                {lat: latitude2, lng: longitude2},
+            ];
+            var parkingline = new google.maps.Polyline({
+                path: linepoints,
+                geodesic: true,
+                strokeColor: '#FF0000',
+                strokeOpacity: 1.0,
+                strokeWeight: 3
+            });
+            parkingline.setMap(map)
+//         var dirService = new google.maps.DirectionsService();
+//         var dirRenderer = new google.maps.DirectionsRenderer({suppressMarkers: true});
+//         dirRenderer.setMap(map);
+
+//         // highlight a street
+//         var request = {
+//             origin: json[i].start.toString(),
+//             destination: json[i].start.toString(),
+//             travelMode: google.maps.TravelMode.DRIVING
+//         };
+//         dirService.route(request, function(result, status) {
+//             if (status == google.maps.DirectionsStatus.OK) {
+//                 dirRenderer.setDirections(result);
+//             }
+//         });
+        }
+
+    }
     
     function putOnMap(json) {
-        for (var i = 1; i < json.length; i++) 
+        for (var i = 0; i < json.length; i++) 
         {
             console.log(json[i])
             var location = json[i].geoloc.toString().split(',')
@@ -272,6 +317,7 @@ function initialize() {
                 info: json[i].title.toString(),
             
             });
+
             
             
             google.maps.event.addListener(marker, 'click', function(marker) 
@@ -279,7 +325,8 @@ function initialize() {
                 marker.scale = 6;
                 infoWindow.setContent(this.info);
                 infoWindow.open(map, this);
-                map.panTo(marker.latLng);
+                 map.panTo(marker.latLng);
+
             }
             );
         }
