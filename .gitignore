@@ -1,3 +1,5 @@
+#hide ssl secrets from the world
+ssl/*
 #Nedbdfiles
 nedbs/*
 
