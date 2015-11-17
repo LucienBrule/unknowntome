@@ -10,6 +10,8 @@
 
 
 
+
+
 html, body
 {
     height: 100%;
@@ -124,13 +126,58 @@ html, body
     <script type="text/javascript">
 
 
+
+
 function initialize() {
-    latLng = new google.maps.LatLng(-8.064903, -34.896872);
+    latLng = new google.maps.LatLng(-8.064903,-34.896872);
+    
+
+    
+    var styles = [
+    {
+        stylers: [
+        {
+            hue: "#f76e6e"
+        }, 
+        {
+            saturation: 10
+        }
+        ]
+    }, {
+        featureType: "road",
+        elementType: "geometry",
+        stylers: [
+        {
+            lightness: 100
+        }, 
+        {
+            visibility: "simplified"
+        }
+        ]
+    }, {
+        featureType: "road",
+        elementType: "labels",
+        stylers: [
+        {
+            visibility: "off"
+        }
+        ]
+    }
+    ];
+    var styledMap = new google.maps.StyledMapType(styles,
+        {name: "Styled Map"});
+    var map = new google.maps.StyledMapType(document.getElementById("map"),myOptions);
     var myOptions = {
         center: latLng,
         zoom: 16,
-    };
-    var map = new google.maps.Map(document.getElementById("map"),myOptions);
+        mapTypeControlOptions: {
+            mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'map_style']
+        }
+    };  
+    var map = new google.maps.Map(document.getElementById('map'),
+    myOptions);
+    map.mapTypes.set('map_style', styledMap);
+    map.setMapTypeId('map_style');
     
     // Try W3C Geolocation (Preferred)
     if (navigator.geolocation) {
@@ -161,57 +208,82 @@ function initialize() {
     }
     
     
-    $.getJSON("/api/quirks/all",function(data){
+    $.getJSON("/api/quirks/all", function(data) {
         putOnMap(data)
-    });
-    $.getJSON("/api/bathrooms/all",function(data){
+    }
+    );
+    $.getJSON("/api/bathrooms/all", function(data) {
         putOnMap(data)
-    });
-    $.getJSON("/api/waterfountains/all",function(data){
+    }
+    );
+    $.getJSON("/api/waterfountains/all", function(data) {
         putOnMap(data)
-    });
-    $.getJSON("/api/meetinglocations/all",function(data){
+    }
+    );
+    $.getJSON("/api/meetinglocations/all", function(data) {
         putOnMap(data)
-    });
-
-    var map;
+    }
+    );
+    
     var markers;
     
-
-    function putOnMap(json){
+    
+    function putOnMap(json) {
         for (var i = 1; i < json.length; i++) 
         {
             console.log(json[i])
             var location = json[i].geoloc.toString().split(',')
             var latitude = +location[0].toString();
             var longitude = +location[1].toString();
-
-                if(json[i].title != 'undefined'){
+            
+            if (json[i].title != 'undefined') {
+                if (json[i].description != 'undefined') {
+                    console.log(json[i].description)
+                    c = json[i].title.toString()
+                    console.log(c)
                     infoWindow = new google.maps.InfoWindow({
-                        content: json[i].title.toString()
-                 })}else{
-                     infoWindow = new gooogle.maps.InfoWindow({
-                         content: json[i].id
-                     })
-                 }
-
-                var marker = new google.maps.Marker(
-                {
-                    position: {
-                        lat: latitude,
-                        lng: longitude
-                    },
-                    map: map,
-                    info: json[i].title.toString()
-                });
-
-                google.maps.event.addListener(marker, 'click', function() 
-                {
-                    infoWindow.setContent(this.info);
-                    infoWindow.open(map, this);
-                });
+                        content: c
+                    });
+                } else {
+                    infoWindow = new google.maps.InfoWindow({
+                        content: c
+                    });
+                }
+            } else {
+                infoWindow = new gooogle.maps.InfoWindow({
+                    content: c
+                })
+            }
+            
+            var marker = new google.maps.Marker(
+            {
+                position: {
+                    lat: latitude,
+                    lng: longitude
+                },
+                icon: {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    scale: 4,
+                    strokeWeight: 1,
+                    fillColor: 'red',
+                    fillOpacity: .2
+                },
+                map: map,
+                info: json[i].title.toString(),
+            
+            });
+            
+            
+            google.maps.event.addListener(marker, 'click', function(marker) 
+            {
+                marker.scale = 6;
+                infoWindow.setContent(this.info);
+                infoWindow.open(map, this);
+                map.panTo(marker.latLng);
+            }
+            );
         }
-
+    
     }
 }
 </script>
