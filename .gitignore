@@ -1,3 +1,6 @@
+#Nedbdfiles
+nedbs/*
+
 # Logs
 logs
 *.log
