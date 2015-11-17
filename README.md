@@ -14,23 +14,23 @@ Unknown to me will calculate the shortest straight line distance to your desired
 We hope that Unknown To Me will expand to more college campuses and even become an add-on for existing map applications such as Google Maps or Waze. We want to increase the number of existing locations by allowing users to add places, contributing to content generation. The quality of any location will be determined by user reviews. However, to prevent users from hating on any given location without reason, we will impose a minimum number of words for the review, forcing the reviewer to give reasons for his/her opinion.
 
 #What we need(in no particular order):
-[]continuos integration
-[]continuous deployment
-[]build scripts and grunt/gulp files
-[]ssl cert
-[]usersubmissions
-[]user submission validation
-[]db pruning
-[]db analytics (basic)
-[]user account integration
-[]info pane on front end
-[]info pane on backend
-[]moble application rough
-[]mobile application polish
-[]initial user generated content seed
-[]marketing push
-[]social media
-[]smooth style guide
-[]better url routing
-[]modularize code
-[]refactor and put into multiple repo's (if growth/usefulness is there)
+- [ ] continuos integration
+- [ ] continuous deployment
+- [ ] build scripts and grunt/gulp files
+- [ ] ssl cert
+- [ ] usersubmissions
+- [ ] user submission validation
+- [ ] db pruning
+- [ ] db analytics (basic)
+- [ ] user account integration
+- [ ] info pane on front end
+- [ ] info pane on backend
+- [ ] moble application rough
+- [ ] mobile application polish
+- [ ] initial user generated content seed
+- [ ] marketing push
+- [ ] social media
+- [ ] smooth style guide
+- [ ] better url routing
+- [ ] modularize code
+- [ ] refactor and put into multiple repo's (if growth/usefulness is there)
