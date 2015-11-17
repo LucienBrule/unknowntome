@@ -1,9 +1,25 @@
+#!/usr/bin/env node
+'use strict';
+
 var app = require(__dirname + '/server'); //Hacky solutution to my problems
 var express = require('express');
-var app = express();                      //Notice how the hack solution doesn't actually matter for in ap operability
+var https = require('https');
+var http = require('http');
+var server;
+var insecureServer;
 var fs = require('fs');
+var port = 443;
+var insecurePort = 80;
+var app = express();                      //Notice how the hack solution doesn't actually matter for in ap operability
 var Datastore = require('nedb')
 var sentiment = require('sentiment');
+//FOR HTTPS
+var SSLoptions = {
+  key: fs.readFileSync('ssl/SSLKEY.key'),
+  cert: fs.readFileSync('ssl/SSLCERT.pem'),
+  requestCert: false,
+  rejectUnauthorized: true
+};
 
 
 var quirk = require(__dirname + '/js/quirk');
@@ -261,7 +277,7 @@ app.get("/:name",function (req,res,next){
 });
 
 //start the server , the entry point is here.
-var server = app.listen(process.env.PORT || 3000, function () {
+  var server = https.createServer(SSLoptions,app).listen(443, function () {
   var host = server.address().address;
   var port = server.address().port;
   var stdin = process.openStdin();
@@ -282,6 +298,20 @@ var server = app.listen(process.env.PORT || 3000, function () {
   parkingspots.find({_id : "01"},function(err,docs){
     console.log(JSON.stringify(docs));
   });
+
+insecureServer = http.createServer();
+insecureServer.on('request', function (req, res) {
+  // TODO also redirect websocket upgrades
+  res.setHeader(
+    'Location'
+  , 'https://' + req.headers.host.replace(/:\d+/, ':' + port) + req.url
+  );
+  res.statusCode = 302;
+  res.end();
+});
+insecureServer.listen(insecurePort, function(){
+  console.log("\nRedirecting all http traffic to https\n");
+});
 
 
   stdin.addListener("data", function(d){
