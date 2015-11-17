@@ -1,37 +1,37 @@
 [
   {
     "title": "Bathroom (DCC Main)",
-    "geoLoc": "42.729589,-73.678860",
+    "geoloc": "42.729589,-73.678860",
     "description": "5 stalls"
   },
   {
     "title": "Bathroom (DCC Lower)",
-    "geoLoc": "42.729360,-73.679113",
+    "geoloc": "42.729360,-73.679113",
     "description": "3 stalls"
   },
   {
     "title": "Bathroom (CII)",
-    "geoLoc": "42.729276,-73.678489",
+    "geoloc": "42.729276,-73.678489",
     "description": "3 stalls"
   },
   {
     "title": "Bathroom (Union Main) ",
-    "geoLoc": "42.729857,-73.677047",
+    "geoloc": "42.729857,-73.677047",
     "description": "5 stalls"
   },
   {
     "title": "Bathroom (BARH D)",
-    "geoLoc": "42.730789,-73.671586",
+    "geoloc": "42.730789,-73.671586",
     "description": "1 stall"
   },
   {
     "title": "Bathroom (JEC)",
-    "geoLoc": "42.729341,-73.680187",
+    "geoloc": "42.729341,-73.680187",
     "description": "3 stalls"
   },
   {
     "title": "Bathroom (JROWL)",
-    "geoLoc": "42.728753,-73.680576",
+    "geoloc": "42.728753,-73.680576",
     "description": "4 stalls"
   }
 ]

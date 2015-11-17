@@ -1,34 +1,34 @@
 [
   {
     "title": "Water Fountain 1",
-    "geoLoc": "42.729901,-73.676977"
+    "geoloc": "42.729901,-73.676977"
   },
   {
     "title": "Water Fountain 2",
-    "geoLoc": "42.729722,-73.678338"
+    "geoloc": "42.729722,-73.678338"
   },
   {
     "title": "Water Fountain 3",
-    "geoLoc": "42.729510,-73.678939"
+    "geoloc": "42.729510,-73.678939"
   },
   {
     "title": "Water Fountain 4",
-    "geoLoc": "42.729333,-73.680096"
+    "geoloc": "42.729333,-73.680096"
   },
   {
     "title": "Water Fountain 5",
-    "geoLoc": "42.728740,-73.680572"
+    "geoloc": "42.728740,-73.680572"
   },
   {
     "title": "Vending (DCC)",
-    "geoLoc": "42.729235,-73.679369"
+    "geoloc": "42.729235,-73.679369"
   },
   {
     "title": "Vending (BARH)",
-    "geoLoc": "42.731150,-73.671333"
+    "geoloc": "42.731150,-73.671333"
   },
   {
     "title": "Vending (JROWL)",
-    "geoLoc": "42.728592,-73.680530"
+    "geoloc": "42.728592,-73.680530"
   }
 ]
