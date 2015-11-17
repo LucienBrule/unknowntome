@@ -21,6 +21,15 @@ var SSLoptions = {
   rejectUnauthorized: true
 };
 
+//EXTRA HTTPS SECURITY
+var helmet = require('helmet');
+
+app.use(helmet.hsts({
+  maxAge: 7776000000,
+  includeSubdomains: true
+}));
+app.use(helmet.hidePoweredBy());
+
 
 var quirk = require(__dirname + '/js/quirk');
 var parking = require(__dirname + '/js/parking')
