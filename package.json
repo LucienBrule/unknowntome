@@ -19,6 +19,7 @@
   "homepage": "https://github.com/LucienBrule/unknowntome#readme",
   "dependencies": {
     "express": "^4.13.3",
+    "helmet": "^0.14.0",
     "nedb": "^1.4.0",
     "sentiment": "^1.0.2"
   }
