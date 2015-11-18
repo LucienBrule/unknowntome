@@ -27,10 +27,10 @@ html, body
 
 #madeBy
 {
-    right:0;
-    pad-right: 0;
+    margin-right:10px;
+    right:10;
     top:0px;
-    text-align: center;
+    text-align: right;
     font-size: 25px;
     font-family: 'Open Sans', sans-serif;
     font-weight: 400;
@@ -43,11 +43,11 @@ html, body
 
 #map
 {
+    box-shadow:inset 0 0 10px #000000;
     margin-left:auto;
     margin-right:auto;
     position: fixed;
-    top: 15px;
-    width: 90%;
+    width: 100%;
     height: 50%;
     padding-bottom: 200px;
 }
@@ -99,6 +99,21 @@ input[type="radio"]  {
     background:url(check_radio_sheet.png) left top no-repeat;
     cursor:pointer;
 }
+#topbar{
+  float:top;
+  background-color:red;
+  width:100%;
+  height:10%;
+  box-shadow: inset 0 8px -6px rgba(0,0,0,0.75);
+}
+#content{
+  top:50px;
+  left:0px;
+  right:0px;
+  bottom:0px;
+  overflow-y:scroll;
+  position:absolute;
+}
 
 </style>
 <script src="/js/jquery-2.1.4.js"></script>
@@ -106,49 +121,54 @@ input[type="radio"]  {
   </head>
 
   <body onload="init()">
-    <div id = "header">UNKNOWN TO </div>
-    <center><div id ="madeBy">Made with <span style="color:#e74c3c;">&hearts;</span> at RPI</div></center>
-    <center><div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div></center>
-    <div id="map"></div>
-
-    <center><div class="mobileSubmit">
-        <div class="formview">
-           <form action="">
-            <br>
-            <input type="text" name = "Furl" placeholder = url><br>
-            <input type="text" name = "Ftitle" placeholder = "title">
-            <input type="text" name = "Fdescription" placeholder = "description">
-            <input type="number" name = "Fsentiment"placeholder = "sentiment"><br>
-            <td>
-              <input type="radio" name="dtype"value="quirk">Quirk</label>
-              <label><input type="radio" name="dtype" value="waterfouuntain">Waterfountiain</label>
-              <label><input type="radio" name="dtype" value="widget">VedingMachine</label>
-              <label><input type="radio" name="dtype" value="bathroom">Bathroom</label><br>
-            </td>
-            <input type="text" name = "Flat"placeholder = "latitude">
-            <input type="text" name = "Flong"placeholder = "longitude"><br>
-            <input type = "submit" value= "Submit!" onlick="UpdateRecord()"/>
-           </form>
-        </div></center>
-
-        <script type="text/javascript">
-            function UpdateRecord(){
-                var url =  $('input[name="Furl"]').val();
-                var type = $('input[name="dtype"]:checked').val();
-                var title = $('input[name="Ftitle"]').val();
-                var descr = $('input[name="Fdescription"]').val();
-                var lat = $('input[name="Flat"]').val();
-                var lng = $('input[name="Flong"]').val();
-                var sent = $('input[name="Fsentiment"]').val();
-                console.log("[request] " + url + "/api/" + type+"?" + "title=" + title +"&geoloc="+lat+","+lng+"&description="+descr)
-                JQuery.ajax({
-                    type: "PUT",
-                    url: url + "/api/" + type,
-                    data: "?" + "title=" + title +"&geoloc="+lat+","+lng+"&description="+descr
-                })
-            }
-        </script>
+    <div id = "topbar">
+      <div id = "header">UNKNOWN TO </div>
+      <div id ="madeBy">Made with <span style="color:#e74c3c;">&hearts;</span> at RPI</div>
+      <center><b>DEV V1</b></center>
+      <center><div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div></center>
     </div>
+   <div id = "content">
+      <div id="map"></div>
+
+      <center><div class="mobileSubmit">
+          <div class="formview">
+             <form action="">
+              <br>
+              <input type="text" name = "Furl" placeholder = url><br>
+              <input type="text" name = "Ftitle" placeholder = "title">
+              <input type="text" name = "Fdescription" placeholder = "description">
+              <input type="number" name = "Fsentiment"placeholder = "sentiment"><br>
+              <td>
+                <input type="radio" name="dtype"value="quirk">Quirk</label>
+                <label><input type="radio" name="dtype" value="waterfouuntain">Waterfountiain</label>
+                <label><input type="radio" name="dtype" value="widget">VedingMachine</label>
+                <label><input type="radio" name="dtype" value="bathroom">Bathroom</label><br>
+              </td>
+              <input type="text" name = "Flat"placeholder = "latitude">
+              <input type="text" name = "Flong"placeholder = "longitude"><br>
+              <input type = "submit" value= "Submit!" onlick="UpdateRecord()"/>
+             </form>
+          </div></center>
+
+          <script type="text/javascript">
+              function UpdateRecord(){
+                  var url =  $('input[name="Furl"]').val();
+                  var type = $('input[name="dtype"]:checked').val();
+                  var title = $('input[name="Ftitle"]').val();
+                  var descr = $('input[name="Fdescription"]').val();
+                  var lat = $('input[name="Flat"]').val();
+                  var lng = $('input[name="Flong"]').val();
+                  var sent = $('input[name="Fsentiment"]').val();
+                  console.log("[request] " + url + "/api/" + type+"?" + "title=" + title +"&geoloc="+lat+","+lng+"&description="+descr)
+                  JQuery.ajax({
+                      type: "PUT",
+                      url: url + "/api/" + type,
+                      data: "?" + "title=" + title +"&geoloc="+lat+","+lng+"&description="+descr
+                  })
+              }
+          </script>
+      </div>
+    </div
 </body>
 
 
