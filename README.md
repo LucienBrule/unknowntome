@@ -17,7 +17,7 @@ We hope that Unknown To Me will expand to more college campuses and even become 
 - [ ] continuos integration
 - [ ] continuous deployment
 - [ ] build scripts and grunt/gulp files
-- [ ] ssl cert
+- [X] ssl cert
 - [ ] usersubmissions
 - [ ] user submission validation
 - [ ] db pruning
