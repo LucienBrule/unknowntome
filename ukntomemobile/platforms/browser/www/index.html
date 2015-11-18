@@ -116,35 +116,36 @@ html, body
 #formview
 {
     font-size: 250%;
+    height: 80px;
+    bottom:20px;
+    padding-top:10px;
 }
 </style>
-    <link rel="shortcut icon" href="favico.ico" />
-
-
-
   </head>
 
-  <body onload="initialize()">
+  <body onload="init()">
     <div id = "header">UNKNOWN TO </div>
-    <center><div id ="madeBy">Made with <span style="color:#e74c3c;">&hearts;</span> for HACK RPI</div></center>
     <center><div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div></center>
     <div id="map"></div>
-    <div class="mobileSubmit">
+
+    <center><div class="mobileSubmit">
         <div class="formview">
             <form action="">
-            <input type="text" name = "Furl">
+            <br><input type="text" name = "Furl"><br>
             <input type="text" name = "Ftitle">
             <input type="text" name = "Fdescription">
-            <input type="number" name = "Fsentiment">
-            <input type="radio" name="dtype"value="quirk">Quirk<br>
-            <input type="radio" name="dtype" value="waterfouuntain">waterfountain<br>
-            <input type="radio" name="dtype" value="widget">widget<br>
-            <input type="radio" name="dtype" value="bathroom">bathroom
-            <input type="text" name = "Flat">
-            <input type="text" name = "Flong">
+            <input type="number" name = "Fsentiment"><br>
+            <input type="radio" name="dtype"value="quirk">Quirk
+            <input type="radio" name="dtype" value="waterfouuntain">Waterfountiain
+            <input type="radio" name="dtype" value="widget">VedingMachine
+            <input type="radio" name="dtype" value="bathroom">Bathroom<br>
+            <input type="text" name = "Flat"><br>
+            <input type="text" name = "Flong"><br>
             <input type = "submit" value= "FSubmit" onlick="UpdateRecord()"/>
             </form>
-        </div>
+        </div></center>
+        <center><div id ="madeBy">Made with <span style="color:#e74c3c;">&hearts;</span> for HACK RPI</div></center>
+
         <script type="text/javascript">
             function UpdateRecord(){
                 var url =  $('input[name="Furl"]').val();
@@ -168,7 +169,11 @@ html, body
 
 <script type="text/javascript">
 
+function init(){
+  console.log("The page loaded!")
+}
 function initialize() {
+    $(".spinner").remove();
     latLng = new google.maps.LatLng(0,0);
     
     var styles = [
