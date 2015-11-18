@@ -4,6 +4,8 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,800' rel='stylesheet' type='text/css'>
     <style type="text/css">
 html, body
+
+
 {
     height: 100%;
     margin: 0;
@@ -82,7 +84,7 @@ html, body
 
 #madeBy
 {
-    position: absolute;
+    position: fixed;
     bottom: 0px;
     text-align: center;
     width: 100%;
@@ -96,10 +98,24 @@ html, body
 
 #map
 {
-    position: absolute;
+    position: fixed;
     top: 35px;
     width: 100%;
-    height: 90%;
+    height: 50%;
+    padding-bottom: 200px;
+}
+
+#mobileSubmit
+{
+    position: fixed;
+    padding-top: 200px;
+    height: 30%;
+    bottom: 30px;
+}
+
+#formview
+{
+    font-size: 250%;
 }
 </style>
     <link rel="shortcut icon" href="favico.ico" />
@@ -113,11 +129,44 @@ html, body
     <center><div id ="madeBy">Made with <span style="color:#e74c3c;">&hearts;</span> for HACK RPI</div></center>
     <center><div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div></center>
     <div id="map"></div>
+    <div class="mobileSubmit">
+        <div class="formview">
+            <form action="">
+            <input type="text" name = "Furl">
+            <input type="text" name = "Ftitle">
+            <input type="text" name = "Fdescription">
+            <input type="number" name = "Fsentiment">
+            <input type="radio" name="dtype"value="quirk">Quirk<br>
+            <input type="radio" name="dtype" value="waterfouuntain">waterfountain<br>
+            <input type="radio" name="dtype" value="widget">widget<br>
+            <input type="radio" name="dtype" value="bathroom">bathroom
+            <input type="text" name = "Flat">
+            <input type="text" name = "Flong">
+            <input type = "submit" value= "FSubmit" onlick="UpdateRecord()"/>
+            </form>
+        </div>
+        <script type="text/javascript">
+            function UpdateRecord(){
+                var url =  $('input[name="Furl"]').val();
+                var type = $('input[name="dtype"]:checked').val();
+                var title = $('input[name="Ftitle"]').val();
+                var descr = $('input[name="Fdescription"]').val();
+                var lat = $('input[name="Flat"]').val();
+                var lng = $('input[name="Flong"]').val();
+                var sent = $('input[name="Fsentiment"]').val();
 
-    <script type="text/javascript">
+                JQuery.ajax({
+                    type: "PUT",
+                    url: url + "/api/" + type,
+                    data: "?" + "title=" + title +"&geoloc="+lat+","+lng+"&description="+descr
+                })
+            }
+        </script>
+    </div>
+</body>
 
 
-
+<script type="text/javascript">
 
 function initialize() {
     latLng = new google.maps.LatLng(0,0);
