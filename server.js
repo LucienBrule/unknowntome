@@ -30,6 +30,13 @@ app.use(helmet.hsts({
 }));
 app.use(helmet.hidePoweredBy());
 
+//security-- api service++
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 
 var quirk = require(__dirname + '/js/quirk');
 var parking = require(__dirname + '/js/parking')
