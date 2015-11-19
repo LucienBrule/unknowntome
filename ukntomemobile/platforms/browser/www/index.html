@@ -127,6 +127,11 @@
         display:inline-block;
 
       }
+      #locationdiv{
+        width: 100%;
+        height: 100%;
+        font-size: 12px;
+      }
 
       </style>
 </head>
@@ -148,8 +153,6 @@
                 <div class="formview">
               <form action="">
                 <br>
-                <input type="text" name = "Furl" placeholder = "url"/><br>
-                  <div id = "rbs">
                     <td>
                       <input type="radio" name="dtype" value="quirk"/>Quirk</label>
                       <label><input type="radio" name="dtype" value="waterfouuntain"/>Waterfountiain</label>
@@ -160,14 +163,10 @@
                   <input type="text" name = "Ftitle" placeholder = "title"/>
                   <input type="text" name = "Fdescription" placeholder = "description"/>
                   <input type="number" name = "Fsentiment"placeholder = "sentiment"/><br>
-                  <div id = "latlng">
-                    <td>
-                      <input type="text" name = "Flat" placeholder = "latitude" />
-                      <input type="text" name = "Flong" placeholder = "longitude"/><br>
-                    </td>
-                  </div>
                 <input type = "button" id = "submitbutton" value= "Submit!" onclick="updaterecord()"/>
              </form>
+             <div id = "locationdiv">
+             </div>
             </div></center>
    	</div><!-- /content -->   
   </div><!--/page -->
@@ -178,6 +177,7 @@
         console.log("The page loaded!");
         initialize();
         document.getElementById("submitbutton").addEventListener("touchend",updaterecord,false)
+        // $("div.locationdiv").html("<p>" + globaluserlocation.coords.latitude + "," + globaluserlocation.coords.longitude + "</p>");
     }
 
     function updaterecord(){
@@ -188,7 +188,6 @@
         console.log(logi);
        
         
-        var url =  encodeURIComponent($('input[name="Furl"]').val());
         var type = encodeURIComponent($('input[name="dtype"]:checked').val());
         var title = encodeURIComponent($('input[name="Ftitle"]').val());
         var descr = encodeURIComponent($('input[name="Fdescription"]').val());
