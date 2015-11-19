@@ -166,38 +166,40 @@
                       <input type="text" name = "Flong" placeholder = "longitude"/><br>
                     </td>
                   </div>
-                <input type = "submit" value= "Submit!" onlick="UpdateRecord()"/>
+                <input type = "button" id = "submitbutton" value= "Submit!" onclick="updaterecord()"/>
              </form>
             </div></center>
-
-                <script>
-                    function UpdateRecord(){
-                        var lati;
-                        var logi;
-                        navigator.geolocation.getCurrentPosition(function(position) {
-                            lati = position.coords.latitude;
-                            logi = position.coords.longitude;
-                        }   
-                        var url =  $('input[name="Furl"]').val();
-                        var type = $('input[name="dtype"]:checked').val();
-                        var title = $('input[name="Ftitle"]').val();
-                        var descr = $('input[name="Fdescription"]').val();
-                        var lat = $('input[name="Flat"]').val();
-                        var lng = $(lati).val();
-                        var sent = $(logi).val();
-                        console.log("[request] " + url + "/api/" + type+"?" + "title=" + title +"&geoloc="+lat+","+lng+"&description="+descr)
-                        JQuery.ajax({
-                            type: "PUT",
-                            url:  "https://unknownto.me/api/" + type + "?"+ "title=" + title +"&geoloc="+lati+","+logi+"&description="+descr
-                        })
-                    }
-                </script>
    	</div><!-- /content -->   
   </div><!--/page -->
 </body>
   <script type = "text/javascript">
+    var globaluserlocation;
     function init() {
+        console.log("The page loaded!");
         initialize();
+        document.getElementById("submitbutton").addEventListener("touchend",updaterecord,false)
+    }
+
+    function updaterecord(){
+        console.log("Updating record...");
+        var lati = globaluserlocation.coords.latitude;
+        var logi = globaluserlocation.coords.longitude;
+        console.log(lati);
+        console.log(logi);
+       
+        
+        var url =  encodeURIComponent($('input[name="Furl"]').val());
+        var type = encodeURIComponent($('input[name="dtype"]:checked').val());
+        var title = encodeURIComponent($('input[name="Ftitle"]').val());
+        var descr = encodeURIComponent($('input[name="Fdescription"]').val());
+        // var lat = $('input[name="Flat"]').val();
+        // // var lng = $(lati).val();
+        // var sent = $(logi).val();
+        console.log("https://unknownto.me/api/" + type + "?"+ "title=" + title +"&geoloc="+lati+","+logi+"&description="+descr);
+
+        $.get("https://unknownto.me/api/" + type + "?"+ "title=" + title +"&geoloc="+lati+","+logi+"&description="+descr, function(data) {
+            putOnMap(data);
+        });
     }
 
     function initialize() {
@@ -247,6 +249,7 @@
             navigator.geolocation.getCurrentPosition(function(position) {
                 initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
                 map.setCenter(initialLocation);
+                globaluserlocation = position;
             }, function() {
                 handleNoGeolocation(browserSupportFlag);
             });
