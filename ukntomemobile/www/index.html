@@ -5,8 +5,6 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,800' rel='stylesheet' type='text/css'>
     <style type="text/css">
       html, body
-
-
       {
           height: 100%;
           margin: 0;
@@ -164,7 +162,7 @@
                   <input type="number" name = "Fsentiment"placeholder = "sentiment"/><br>
                   <div id = "latlng">
                     <td>
-                      <input type="text" name = "Flat" placeholder = "latitude"/>
+                      <input type="text" name = "Flat" placeholder = "latitude" />
                       <input type="text" name = "Flong" placeholder = "longitude"/><br>
                     </td>
                   </div>
@@ -174,18 +172,23 @@
 
                 <script>
                     function UpdateRecord(){
+                        var lati;
+                        var logi;
+                        navigator.geolocation.getCurrentPosition(function(position) {
+                            lati = position.coords.latitude;
+                            logi = position.coords.longitude;
+                        }   
                         var url =  $('input[name="Furl"]').val();
                         var type = $('input[name="dtype"]:checked').val();
                         var title = $('input[name="Ftitle"]').val();
                         var descr = $('input[name="Fdescription"]').val();
                         var lat = $('input[name="Flat"]').val();
-                        var lng = $('input[name="Flong"]').val();
-                        var sent = $('input[name="Fsentiment"]').val();
+                        var lng = $(lati).val();
+                        var sent = $(logi).val();
                         console.log("[request] " + url + "/api/" + type+"?" + "title=" + title +"&geoloc="+lat+","+lng+"&description="+descr)
                         JQuery.ajax({
                             type: "PUT",
-                            url: url + "/api/" + type,
-                            data: "?" + "title=" + title +"&geoloc="+lat+","+lng+"&description="+descr
+                            url:  "https://unknownto.me/api/" + type + "?"+ "title=" + title +"&geoloc="+lati+","+logi+"&description="+descr
                         })
                     }
                 </script>
@@ -238,7 +241,6 @@
             myOptions);
         map.mapTypes.set('map_style', styledMap);
         map.setMapTypeId('map_style');
-
         // Try W3C Geolocation (Preferred)
         if (navigator.geolocation) {
             browserSupportFlag = true;
@@ -299,6 +301,7 @@
 
         function putOnMap(json) {
             for (i = 0; i < json.length; i++) {
+                if(json[i] == 'undefined'){ continue;}
                 var location = json[i].geoloc.toString().split(',');
                 var latitude = +location[0].toString();
                 var longitude = +location[1].toString();
@@ -359,5 +362,5 @@
 </script>
       <script async src="https://code.jquery.com/jquery-2.1.4.js"></script>
       <script async src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
-      <script async src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
+      <!-- <script async src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script> -->
 </html>

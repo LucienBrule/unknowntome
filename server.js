@@ -83,7 +83,7 @@ app.use("/",express.static(__dirname + "/public",options))
 // app.use(express.static('./public'));
 
 //route the quirks
-app.put('/api/quirk', function (req, res) {
+app.get('/api/quirk', function (req, res) {
   res.send('Got a PUT request at /user');
   console.log("User %s attempted to PUT at /user",req.connection.remoteAddress);
   var myquirk = new quirk(req.query.title,req.query.geoloc,
@@ -113,7 +113,7 @@ app.get('quirks/bysentiment',function (req, res) {
     res.send(JSON.stringify(docs));
   });
 });
-app.put('/api/quirk/comment', function (req, res) {
+app.get('/api/quirk/comment', function (req, res) {
  res.send("OK")
  quirks.find({title:req.query.title},function(err,docs){
   var mysent = String(parseInt(docs.sentiment) + parseInt(sentiment(req.query.comment))/2);
@@ -127,7 +127,7 @@ app.delete('/api/quirk/id', function (req, res) {
 });
 
 //route parking spaces
-app.put('/api/parkingspot', function (req, res) {
+app.get('/api/parkingspot', function (req, res) {
   res.send('Got a PUT request at /user');
   console.log("User %s attempted to PUT at /user",req.connection.remoteAddress);
   var myparkingspot = new parkingspot(req.query.title,req.query.start,req.query.stop);
@@ -158,7 +158,7 @@ app.delete('/api/parkingspot/id', function (req, res) {
 });
 
 //route bathrooms
-app.put('/api/bathroom', function (req, res) {
+app.get('/api/bathroom', function (req, res) {
   res.send('Got a PUT request at /user');
   console.log("User %s attempted to PUT at /user",req.connection.remoteAddress);
   var mybathroom = new bathroom(req.query.title,req.query.geoloc,
@@ -193,7 +193,7 @@ app.delete('/api/bathroom/id', function (req, res) {
 });
 
 //route meeting locations
-app.put('/api/meetinglocation', function (req, res) {
+app.get('/api/meetinglocation', function (req, res) {
   res.send('Got a PUT request at /user');
   console.log("User %s attempted to PUT at /user",req.connection.remoteAddress);
   var mymeetinglocation = new meetinglocation(req.query.title,req.query.geoloc,
@@ -232,7 +232,7 @@ app.delete('/api/meetinglocation/id', function (req, res) {
 
 //route water fountains
 app.route("/waterfountain");
-app.put('/api/waterfountain', function (req, res) {
+app.get('/api/waterfountain', function (req, res) {
     res.send('Got a PUT request at /user');
     console.log("User %s attempted to PUT at /user",req.connection.remoteAddress);
     var mywaterfountain = new waterfountain(req.query.title,req.query.geoloc,
