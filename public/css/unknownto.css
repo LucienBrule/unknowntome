@@ -250,7 +250,7 @@ a:focus {
 }
 
 .content-section {
-    padding-top: 0px;
+    padding-top: 250px;
 }
 
 @media(min-width:767px) {
@@ -263,6 +263,13 @@ a:focus {
         height: 650px;
         margin-top: 25px;
     }
+}
+
+a.anchor {
+    display: block;
+    position: relative;
+    top: -25px;
+    padding-top: 25px;
 }
 
 .btn {
