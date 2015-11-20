@@ -342,3 +342,14 @@ img::-moz-selection {
 body {
     webkit-tap-highlight-color: rgba(255,255,255,.2);
 }
+.map-info-window{
+   overflow:hidden;
+   position:absolute;
+   background: transparent;
+}
+.gm-style-iw {
+   top: 0 !important;
+   left: 0 !important;
+   bottom: .1 !important;
+   background-color: #C40000;
+}

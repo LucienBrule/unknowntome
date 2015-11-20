@@ -11,6 +11,9 @@
           background: #c0392b;
           padding: 0;
       }
+      img[src="gstatic.com/"], img[src*="googleapis.com/"] {
+        max-width: none;
+      }
 
 
       #header
@@ -302,6 +305,13 @@
         }
 
         function putOnMap(json) {
+          /** FIX for Bootstrap and Google Maps Info window styes problem **/
+ var css = document.createElement('style');
+ css.type = 'text/css';
+ var styles = 'img[src*="gstatic.com/"], img[src*="googleapis.com/"] { max-width: none; }';
+ if (css.styleSheet) css.styleSheet.cssText = styles;
+ else css.appendChild(document.createTextNode(styles));
+ document.getElementsByTagName("head")[0].appendChild(css);
             for (i = 0; i < json.length; i++) {
                 if(json[i] == 'undefined'){ continue;}
                 var location = json[i].geoloc.toString().split(',');

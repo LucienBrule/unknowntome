@@ -22,6 +22,12 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <style type="text/css">
+/** FIX for Bootstrap and Google Maps Info window styes problem */
+img[src="gstatic.com/"], img[src*="googleapis.com/"] {
+max-width: none;
+}
+</style>
 
 </head>
 
@@ -129,230 +135,190 @@
 
     <script type="text/javascript">
 
-function initialize() {
-    latLng = new google.maps.LatLng(0,0);
-    
-    var styles = [
-    {
-        stylers: [
-        {
-            hue: "#c0392b"
-        }, 
-        {
-            saturation: 5
-        }
-        ]
-    }, {
-        featureType: "road",
-        elementType: "geometry",
-        stylers: [
-        {
-            lightness: 100
-        }, 
-        {
-            visibility: "simplified"
-        }
-        ]
-    }, {
-        featureType: "road",
-        elementType: "labels",
-        stylers: [
-        {
-            visibility: "off"
-        }
-        ]
-    }
-    ];
+    function initialize() {
+        var latLng = new google.maps.LatLng(0, 0);
+        var styles = [{
+            stylers: [{
+                hue: "#c0392b"
+            }, {
+                saturation: 5
+            }]
+        }, {
+            featureType: "road",
+            elementType: "geometry",
+            stylers: [{
+                lightness: 100
+            }, {
+                visibility: "simplified"
+            }]
+        }, {
+            featureType: "road",
+            elementType: "labels",
+            stylers: [{
+                visibility: "off"
+            }]
+        }];
 
-    var styledMap = new google.maps.StyledMapType(styles,
-        {name: "Styled Map"});
-    var map = new google.maps.StyledMapType(document.getElementById("map"),myOptions);
-    var myOptions = {
-        center: latLng,
-        zoom: 16,
-        maxZoom:20,
-        mapTypeControlOptions: {
-            mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'map_style']
-        }
-    };  
-    var map = new google.maps.Map(document.getElementById('map'),
-    myOptions);
-    map.mapTypes.set('map_style', styledMap);
-    map.setMapTypeId('map_style');
-    
-    // Try W3C Geolocation (Preferred)
-    if (navigator.geolocation) {
-        browserSupportFlag = true;
-        navigator.geolocation.getCurrentPosition(function(position) {
-            initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
-            map.setCenter(initialLocation);
-        }
-        , function() {
-            handleNoGeolocation(browserSupportFlag);
-        }
-        );
-    } else {
-        // Browser doesn't support Geolocation
-        alert("Please enable your location");
-    }
-    
-    function httpGetAsync(theUrl, callback) 
-    {
-        var xmlHttp = new XMLHttpRequest();
-        xmlHttp.onreadystatechange = function() {
-            if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-                callback(xmlHttp.responseText);
-        }
-        xmlHttp.open("GET", theUrl, true);
-        // true for asynchronous 
-        xmlHttp.send(null );
-    }
-    
-    
-    $.getJSON("/api/quirks/all", function(data) {
-        putOnMap(data)
-    }
-    );
-    $.getJSON("/api/parkingspots/all", function(data) {
-    putParkingOnMap(data)
-    }
-    );
-    $.getJSON("/api/bathrooms/all", function(data) {
-        putOnMap(data)
-    }
-    );
-    $.getJSON("/api/waterfountains/all", function(data) {
-        putOnMap(data)
-    }
-    );
-    $.getJSON("/api/meetinglocations/all", function(data) {
-        putOnMap(data)
-    }
-    );
+        var styledMap = new google.maps.StyledMapType(styles, {
+            name: "Styled Map"
+        });
 
-    
-    var markers;
-    function putParkingOnMap(json){
-        for (var i = 0; i < json.length; i++) 
-        {
-            var location = json[i].start.toString().split(',')
-            var latitude1 = +location[0].toString();
-            var longitude1 = +location[1].toString();
-
-            var location = json[i].stop.toString().split(',')
-            var latitude2 = +location[0].toString();
-            var longitude2 = +location[1].toString();
-            var linepoints = [
-                {lat: latitude1, lng: longitude1},
-                {lat: latitude2, lng: longitude2},
-            ];
-            var parkingline = new google.maps.Polyline({
-                path: linepoints,
-                geodesic: true,
-                strokeColor: '#FF0000',
-                strokeOpacity: 1.0,
-                strokeWeight: 3
+        var map = new google.maps.StyledMapType(document.getElementById("map"), myOptions);
+        var myOptions = {
+            center: latLng,
+            zoom: 16,
+            maxZoom: 20,
+            mapTypeControlOptions: {
+                mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'map_style']
+            }
+        };
+        var map = new google.maps.Map(document.getElementById('map'),
+            myOptions);
+        map.mapTypes.set('map_style', styledMap);
+        map.setMapTypeId('map_style');
+        // Try W3C Geolocation (Preferred)
+        if (navigator.geolocation) {
+            browserSupportFlag = true;
+            navigator.geolocation.getCurrentPosition(function(position) {
+                initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                map.setCenter(initialLocation);
+                globaluserlocation = position;
+            }, function() {
+                handleNoGeolocation(browserSupportFlag);
             });
-            parkingline.setMap(map)
-//         var dirService = new google.maps.DirectionsService();
-//         var dirRenderer = new google.maps.DirectionsRenderer({suppressMarkers: true});
-//         dirRenderer.setMap(map);
-
-//         // highlight a street
-//         var request = {
-//             origin: json[i].start.toString(),
-//             destination: json[i].start.toString(),
-//             travelMode: google.maps.TravelMode.DRIVING
-//         };
-//         dirService.route(request, function(result, status) {
-//             if (status == google.maps.DirectionsStatus.OK) {
-//                 dirRenderer.setDirections(result);
-//             }
-//         });
+        } else {
+            // Browser doesn't support Geolocation
+            alert("Please enable your location");
         }
 
-    }
+
+        $.getJSON("https://unknownto.me/api/quirks/all", function(data) {
+            putOnMap(data);
+        });
+        $.getJSON("https://unknownto.me/api/parkingspots/all", function(data) {
+            putParkingOnMap(data);
+        });
+        $.getJSON("https://unknownto.me/api/bathrooms/all", function(data) {
+            putOnMap(data);
+        });
+        $.getJSON("https://unknownto.me/api/waterfountains/all", function(data) {
+            putOnMap(data);
+        });
+        $.getJSON("https://unknownto.me/api/meetinglocations/all", function(data) {
+            putOnMap(data);
+        });
     
-    function putOnMap(json) {
-        for (var i = 0; i < json.length; i++) 
-        {
-            console.log(json[i])
-            var location = json[i].geoloc.toString().split(',')
-            var latitude = +location[0].toString();
-            var longitude = +location[1].toString();
-            
-            if (json[i].title != 'undefined') {
-                if (json[i].description != 'undefined') {
-                    console.log(json[i].description)
-                    c = json[i].title.toString()
-                    console.log(c)
-                    infoWindow = new google.maps.InfoWindow({
-                        content: c
-                    });
+
+        function putParkingOnMap(json) {
+            for (i = 0; i < json.length; i++) {
+                var location = json[i].start.toString().split(',')
+                var latitude1 = +location[0].toString();
+                var longitude1 = +location[1].toString();
+                var location = json[i].stop.toString().split(',')
+                var latitude2 = +location[0].toString();
+                var longitude2 = +location[1].toString();
+                var linepoints = [{
+                    lat: latitude1,
+                    lng: longitude1
+                }, {
+                    lat: latitude2,
+                    lng: longitude2
+                }];
+                var parkingline = new google.maps.Polyline({
+                    path: linepoints,
+                    geodesic: true,
+                    strokeColor: '#FF0000',
+                    strokeOpacity: 1.0,
+                    strokeWeight: 3
+                });
+                parkingline.setMap(map)
+            }
+        }
+
+        function putOnMap(json) {
+        /** FIX for Bootstrap and Google Maps Info window styes problem **/
+         var css = document.createElement('style');
+         css.type = 'text/css';
+         var styles = 'img[src*="gstatic.com/"], img[src*="googleapis.com/"] { max-width: none; }';
+         if (css.styleSheet) css.styleSheet.cssText = styles;
+         else css.appendChild(document.createTextNode(styles));
+         document.getElementsByTagName("head")[0].appendChild(css);
+         //~fix
+
+            for (i = 0; i < json.length; i++) {
+                if(json[i] == 'undefined'){ continue;}
+                var location = json[i].geoloc.toString().split(',');
+                var latitude = +location[0].toString();
+                var longitude = +location[1].toString();
+                var c = "fillme";
+                if (json[i].title != 'undefined') {
+                    if (json[i].description != 'undefined') {
+                        c = '<div iw-container style ="background-color: #C40000;color = black"><b>"' + json[i].title.toString() + '"</b><br><center><p style=\"width:12em;\">"' + json[i].description.toString() + '"</p><center></div>'
+                        infoWindow = new google.maps.InfoWindow({
+                            content: c
+                        });
+                    } else {
+                        c = json[i].title.toString()
+                        infoWindow = new google.maps.InfoWindow({
+                            content: c
+                        });
+
+                    }
                 } else {
+                    c = "?";
                     infoWindow = new google.maps.InfoWindow({
                         content: c
                     });
                 }
-            } else {
-                infoWindow = new gooogle.maps.InfoWindow({
-                    content: c
-                })
+                var marker = new google.maps.Marker({
+                    position: {
+                        lat: latitude,
+                        lng: longitude
+                    },
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 5,
+                        strokeWeight: 1,
+                        fillColor: 'red',
+                        fillOpacity: 0.2
+                    },
+                    map: map,
+                    info: c,
+                    animation: google.maps.Animation.DROP
+                });
+
+                marker.addListener('click', function() {
+                    if (marker.getAnimation() !== null) {
+                        marker.setAnimation(null);
+                    } else {
+                        marker.setAnimation(google.maps.Animation.BOUNCE);
+                        setTimeout(function(){ marker.setAnimation(null); }, 300);
+
+                    }
+                });
+                google.maps.event.addListener(marker, 'click', function(marker) {
+                    // Reference to the DIV which receives the contents of the infowindow using jQuery
+   var iwOuter = $('.gm-style-iw');
+
+   /* The DIV we want to change is above the .gm-style-iw DIV.
+    * So, we use jQuery and create a iwBackground variable,
+    * and took advantage of the existing reference to .gm-style-iw for the previous DIV with .prev().
+    */
+   var iwBackground = iwOuter.prev();
+
+   // Remove the background shadow DIV
+   iwBackground.children(':nth-child(2)').css({'display' : 'none','background' : 'transparent'});
+
+   // Remove the white background DIV
+   iwBackground.children(':nth-child(4)').css({'background' : '#C40000', 'opacity':'0.5'});
+
+                        infoWindow.setContent(this.info);
+                        infoWindow.open(map, this);
+                        map.panTo(marker.latLng);
+                });
             }
-            
-            var marker = new google.maps.Marker(
-            {
-                position: {
-                    lat: latitude,
-                    lng: longitude
-                },
-                icon: {
-                    path: google.maps.SymbolPath.CIRCLE,
-                    scale: 4,
-                    strokeWeight: 1,
-                    fillColor: 'red',
-                    fillOpacity: .2
-                },
-                map: map,
-                info: json[i].title.toString(),
-            
-            });
-
-            
-            
-            google.maps.event.addListener(marker, 'click', function(marker) 
-            {
-                marker.scale = 6;
-                infoWindow.setContent(this.info);
-                infoWindow.open(map, this);
-                 map.panTo(marker.latLng);
-
-            }
-            );
-//             google.maps.event.addListener(map, 'zoom_changed', function() {
-//                 if (map.getZoom() < 20) map.setZoom(minZoomLevel);
-//             });
-//             google.maps.event.addListener(map, 'dragend', function() {
-//                 if (strictBounds.contains(map.getCenter())) return;
-//                      var c = map.getCenter(),
-//                      x = c.lng(),
-//                      y = c.lat(),
-//                      maxX = strictBounds.getNorthEast().lng(),
-//                      maxY = strictBounds.getNorthEast().lat(),
-//                      minX = strictBounds.getSouthWest().lng(),
-//                      minY = strictBounds.getSouthWest().lat();
-
-//              if (x < minX) x = minX;
-//              if (x > maxX) x = maxX;
-//              if (y < minY) y = minY;
-//              if (y > maxY) y = maxY;
-
-//              map.setCenter(new google.maps.LatLng(y, x));
-//            });
         }
-    
     }
-}
 
 </script>
 
