@@ -9,7 +9,7 @@
   	height: 100%;
   	bottom: 0;
 }
-#infocard{
+#infocontainer{
 	z-index: 10;
 	position:absolute;
 	margin-left: 20%;
@@ -29,3 +29,4 @@
 .scroll {
   height: 100%;
 }
+
