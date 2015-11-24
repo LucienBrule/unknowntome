@@ -15,79 +15,79 @@
     <script src="cordova.js"></script>
 </head>
 
-<body ng-app= 'unknownto' ng-controller='SlideBoxCtrl'>
+<body ng-app='unknownto' ng-controller='SlideBoxCtrl'>
     <!-- <ion-content> -->
     <ion-view>
-        <ion-slide-box>
+        <ion-slide-box ng-init="disableSwipe()">
             <ion-slide>
-              <ion-content>
-              <ion-header-bar class="bar-dark">
-            <button ng-click="previous()" class="button button-positive">Back</button>
-            <h1 class="title">UnknownTo</h1>
-            <button ng-click="next()" class="button button-positive">ADD</button>
-        </ion-header-bar>
-                <!-- <div class="box blue"> -->
-                <!-- </div> -->
+                <ion-content>
+                    <ion-header-bar class="bar-dark">
+                        <button ng-click="previous()" class="button button-positive">Back</button>
+                        <h1 class="title">UnknownTo</h1>
+                        <button ng-click="next()" class="button button-positive">ADD</button>
+                    </ion-header-bar>
+                    <!-- <div class="box blue"> -->
+                    <!-- </div> -->
                     <div id="mapviewdiv" ng-controller="MapCtrl">
-                    <div id="map" data-tap-disabled="true"></div>
-                    <div id="infocontainer">
-                        <div id='infocard' class='item item-text-wrap'></div>
-                    </div>
-                    <div id="locatebar" class="bar bar-subfooter">
-                        <button ng-click="centerOnMe()" class="button button-icon icon ion-navigate">Find Me</button>
-                        <h2 class="title">Sub Header</h2>
-                    </div>
-                    <div id="filterbardiv">
-                        <div class="button-bar">
-                            <button class="button" ng-click="clickTest('red')">red</button>
-                            <button class="button" ng-click="clickTest('yellow')">blue</button>
-                            <button class="button" ng-click="clickTest('green')">green</button>
-                            <button class="button" ng-click="checkconnection()">check</button>
-                            <button class="button" ng-click="initmap()">init</button>
+                        <div id="map" data-tap-disabled="true"></div>
+                        <div id="infocontainer">
+                            <div id='infocard' class='item item-text-wrap'></div>
+                        </div>
+                        <div id="locatebar" class="bar bar-subfooter">
+                            <button ng-click="centerOnMe()" class="button button-icon icon ion-navigate">Find Me</button>
+                            <h2 class="title">Sub Header</h2>
+                        </div>
+                        <div id="filterbardiv">
+                            <div class="button-bar">
+                                <button class="button" ng-click="clickTest('red')">red</button>
+                                <button class="button" ng-click="clickTest('yellow')">blue</button>
+                                <button class="button" ng-click="clickTest('green')">green</button>
+                                <button class="button" ng-click="checkconnection()">check</button>
+                                <button class="button" ng-click="initmap()">init</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-              </ion-content>
+                </ion-content>
             </ion-slide>
             <ion-slide>
-              <ion-content>
-                <div class="box backhigh">
-                  <div class="bar bar-header bar-dark">
-                  <button ng-click="previous()" class="button button-positive">Back</button>
-                    <h1 class="title">UnknownTO</h1>
-                    <button class="button button-positive" ng-click="clickSubmit()">
-                      Submit
-                    </button>
-                  </div>
-                  <div id="addForm">
-                    <div id='titleinput' class="list list-inset backgr">
-                      <label class="item item-input backgr">
-                        <input  type="text" placeholder="Title">
-                      </label>
-                    </div>
-                    <div id = 'descriptionbox' class="list list-inset">
-                      <label class="item item-input backgr" id="descriptionbox backgr">
-                        <input id='descriptionbox' type="text" placeholder="Description">
-                      </label>
-                    </div>
-                    <div class="button-bar">
-                      <a style='background-color:#d33682'class="button">A</a>
-                      <a style='background-color:#6c71c4'class="button">B</a>
-                      <a style='background-color:#268bd2'class="button">C</a>
-                      <a style='background-color:#2aa198'class="button">D</a>
-                    </div>
-                    <li class="item item-toggle backgr">
-                      Special Access
-                      <label class="toggle toggle-assertive">
-                        <input type="checkbox">
-                        <div class="track">
-                          <div class="handle"></div>
+                <ion-content>
+                    <div class="box backhigh">
+                        <div class="bar bar-header bar-dark">
+                            <button ng-click="previous()" class="button button-positive">Back</button>
+                            <h1 class="title">UnknownTO</h1>
+                            <button class="button button-positive" ng-click="clickSubmit()">
+                                Submit
+                            </button>
                         </div>
-                      </label>
-                    </li>
-                  </div>
-                </div>
-               </ion-content> 
+                        <div id="addForm">
+                            <div id='titleinput' class="list list-inset backgr">
+                                <label class="item item-input backgr">
+                                    <input type="text" placeholder="Title">
+                                </label>
+                            </div>
+                            <div id='descriptionbox' class="list list-inset">
+                                <label class="item item-input backgr" id="descriptionbox backgr">
+                                    <input id='descriptionbox' type="text" placeholder="Description">
+                                </label>
+                            </div>
+                            <div class="button-bar">
+                                <a style='background-color:#d33682' class="button">A</a>
+                                <a style='background-color:#6c71c4' class="button">B</a>
+                                <a style='background-color:#268bd2' class="button">C</a>
+                                <a style='background-color:#2aa198' class="button">D</a>
+                            </div>
+                            <li class="item item-toggle backgr">
+                                Special Access
+                                <label class="toggle toggle-assertive">
+                                    <input type="checkbox">
+                                    <div class="track">
+                                        <div class="handle"></div>
+                                    </div>
+                                </label>
+                            </li>
+                        </div>
+                    </div>
+                </ion-content>
             </ion-slide>
         </ion-slide-box>
     </ion-view>
@@ -95,4 +95,3 @@
 </body>
 
 </html>
-
