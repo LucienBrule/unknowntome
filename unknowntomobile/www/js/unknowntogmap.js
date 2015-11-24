@@ -1,9 +1,11 @@
 angular.module('ionic.example', ['ionic'])
 .controller('MapCtrl', function($scope,$http, $ionicLoading, $compile) {
     $scope.currenttitle = "yo";
-    $scope.currentcardcontent = 'you cant see me'
-    function initialize() {
+    $scope.currentcardcontent = 'you cant see me';
+    $scope.initmap  = function(){
         console.log("initialize")
+        document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap'>initialize</div>";
+
         var latLng = new google.maps.LatLng(42.7301729, -73.6875558);
         var styles = [
     {
@@ -370,6 +372,8 @@ angular.module('ionic.example', ['ionic'])
         ]
     }
 ];
+document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap'>loaded styles</div>";
+
         // var styles = [{
         //     stylers: [{
         //         hue: "#c0392b"
@@ -405,38 +409,56 @@ angular.module('ionic.example', ['ionic'])
                 mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'map_style']
             }
         };
+document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap'>midlemap</div>";
+
         var map = new google.maps.Map(document.getElementById('map'),
             myOptions);
         map.mapTypes.set('map_style', styledMap);
         map.setMapTypeId('map_style');
-        // Try W3C Geolocation (Preferred)
-        if (navigator.geolocation) {
-            browserSupportFlag = true;
-            navigator.geolocation.getCurrentPosition(function(position) {
-                initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-                map.setCenter(initialLocation);
-                globaluserlocation = position;
-            }, function() {
-                handleNoGeolocation(browserSupportFlag);
-            });
-        } else {
-            // Browser doesn't support Geolocation
-            alert("Please enable your location");
-        }
+        initialLocation = new google.maps.LatLng(42.729145699999995,-73.677779999999);
+        map.setCenter(initialLocation);
+document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap'>Loading data..</div>";
 
         $http.get("https://unknownto.me/api/quirks/all")
-            .success(function(data) {console.log("data",data);$scope.putOnMap(data);});
-        $http.get("https://unknownto.me/api/parkingspots/all")
-            .success(function(data) {console.log("data",data);$scope.putParkingOnMap(data);});
-        $http.get("https://unknownto.me/api/bathrooms/all")
-            .success(function(data) {console.log("data",data);$scope.putOnMap(data);});
-        $http.get("https://unknownto.me/api/waterfountains/all")
-            .success(function(data) {console.log("data",data);$scope.putOnMap(data);});
-        $http.get("https://unknownto.me/api/meetinglocations/all")
-            .success(function(data) {console.log("data",data);$scope.putOnMap(data);});
+            .success(function(data) {
+document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap'>request success</div>";
 
+                console.log("data",data);$scope.putOnMap(data);
+document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap'>Loaded quriks</div>";
+
+        });
+        $http.get("https://unknownto.me/api/parkingspots/all")
+            .success(function(data) {
+document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap'>loaded parkingspots</div>";
+
+                console.log("data",data);$scope.putParkingOnMap(data);});
+        $http.get("https://unknownto.me/api/bathrooms/all")
+            .success(function(data) {
+document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap'>loaded bathrooms</div>";
+
+                console.log("data",data);$scope.putOnMap(data);});
+        $http.get("https://unknownto.me/api/waterfountains/all")
+            .success(function(data) {
+document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap'>loaded waterfountains</div>";
+
+                console.log("data",data);$scope.putOnMap(data);})
+// .finally(function() {
+// document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap'>setting map`</div>";
+//         $scope.map = map;
+// document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap'>map set</div>";
+// });
+document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap'>setting map`</div>";
         $scope.map = map;
-    }
+document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap'>map set</div>";
+document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap'>This is also cool</div>";
+
+//         $http.get("https://unknownto.me/api/meetinglocations/all")
+//             .success(function(data) {
+// document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap'>meetinglocations</div>";
+
+//                 console.log("data",data);$scope.putOnMap(data);
+//             });
+}
 
     $scope.putParkingOnMap = function(json) {
         for (i = 0; i < json.length; i++) {
@@ -518,18 +540,18 @@ angular.module('ionic.example', ['ionic'])
                 animation: google.maps.Animation.DROP
             });
 
-            marker.addListener('click', function() {
-                if (marker.getAnimation() !== null) {
-                    marker.setAnimation(null);
-                } else {
-                    marker.setAnimation(google.maps.Animation.BOUNCE);
-                    setTimeout(function() {
-                        marker.setAnimation(null);
-                    }, 300);
-                }
-            });
+            // marker.addListener('click', function() {
+            //     if (marker.getAnimation() !== null) {
+            //         marker.setAnimation(null);
+            //     } else {
+            //         marker.setAnimation(google.maps.Animation.BOUNCE);
+            //         setTimeout(function() {
+            //             marker.setAnimation(null);
+            //         }, 300);
+            //     }
+            // });
             google.maps.event.addListener(marker, 'click', function(marker) {
-                this.scale = new google.maps.Size(50, 50);
+                // this.scale = new google.maps.Size(50, 50);
                 // infoWindow.setContent(this.info);
                 // $compile(infowindow.content)($scope);
                 // infoWindow.open($scope.map, this);
@@ -539,9 +561,9 @@ angular.module('ionic.example', ['ionic'])
             });
         }
     }
-    google.maps.event.addDomListener(window, 'load', initialize);
-
     $scope.centerOnMe = function() {
+document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap'>Center on me</div>";
+
         $scope.currentcardcontent = "Nigga we moving!";
         console.log("CenterOnMe")
         if(!$scope.map) {
@@ -553,16 +575,21 @@ angular.module('ionic.example', ['ionic'])
           showBackdrop: false
         });
 
-        navigator.geolocation.getCurrentPosition(function(pos) {
-          $scope.map.setCenter(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
+          $scope.map.setCenter(new google.maps.LatLng(42.729145699999995,-73.677779999999));
           $scope.loading.hide();
-        }, function(error) {
-          alert('Unable to get location: ' + error.message);
-        });
-      };
+    }
+    $scope.checkconnection = function(){
+$http.get('https://unknownto.me')
+    .success(function(data) {
+document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap'>Internet works</div>";
+
+})
+.error(function(data, status) {
+    document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap'> ERROR" +responce + "</div>";
+});
+    }
       
-      $scope.clickTest = function() {
-        alert('Example of infowindow with ng-click')
+    $scope.clickTest = function(color) {
+    document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap' style ='background:"+color+"'> Clicked a button</div>";
       };
 }); //end of controller
-

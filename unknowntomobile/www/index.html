@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html ng-app="ionic.example">
-
 <head>
     <meta charset="utf-8">
     <title>Map</title>
@@ -9,12 +8,11 @@
     <script src="lib/ionic/js/ionic.bundle.js"></script>
     <script src="/js/ionic.swipecards.js"></script>
     <!-- google maps javascript -->
-    <script src="//maps.googleapis.com/maps/api/js?key=AIzaSyB16sGmIekuGIvYOfNoW9T44377IU2d2Es&sensor=true"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB16sGmIekuGIvYOfNoW9T44377IU2d2Es&sensor=true"></script>
     <link href="css/style.css" rel="stylesheet">
     <script src="js/unknowntogmap.js"></script>
     <script src="cordova.js"></script>
 </head>
-
 <body>
     <ion-content>
         <ion-header-bar class="bar-dark">
@@ -23,22 +21,23 @@
         </ion-header-bar>
         <div id="mapviewdiv" ng-controller="MapCtrl">
             <div id="map" data-tap-disabled="true"></div>
-            <div id = "infocontainer"></div>
+            <div id="infocontainer">
+              <div id='infocard' class='item item-text-wrap'></div>
+            </div>
             <div id="locatebar" class="bar bar-subfooter">
                 <a ng-click="centerOnMe()" class="button button-icon icon ion-navigate">Find Me</a>
                 <h2 class="title">Sub Header</h2>
             </div>
+            <div id="filterbardiv">
+                <div class="button-bar">
+                    <a class="button" ng-click="clickTest('red')">red</a>
+                    <a class="button" ng-click="clickTest('yellow')">blue</a>
+                    <a class="button" ng-click="clickTest('green')">green</a>
+                    <a class="button" ng-click="checkconnection()">check</a>
+                    <a class="button" ng-click="initmap()">init</a>
+                </div>
+            </div>
         </div>
     </ion-content>
-    <div id="filterbardiv">
-        <div class="button-bar">
-            <a class="button">item 1</a>
-            <a class="button">item 2</a>
-            <a class="button">item 3</a>
-            <a class="button">item 4</a>
-            <a class="button">item 5</a>
-        </div>
-    </div>
 </body>
-
 </html>
