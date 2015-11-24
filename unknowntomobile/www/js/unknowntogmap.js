@@ -1,4 +1,25 @@
-angular.module('ionic.example', ['ionic'])
+angular.module('unknownto', ['ionic'])
+.controller('SlideBoxCtrl', function($scope, $timeout, $ionicSlideBoxDelegate){
+  
+  $timeout(function(){
+    $ionicSlideBoxDelegate.enableSlide(true); 
+  });
+  
+  $scope.next = function() {
+      $ionicSlideBoxDelegate.enableSlide(true);
+      $ionicSlideBoxDelegate.next();
+      $ionicSlideBoxDelegate.enableSlide(false);
+  };
+  
+  $scope.previous = function() {
+    $ionicSlideBoxDelegate.enableSlide(true);
+    $ionicSlideBoxDelegate.previous();
+    $ionicSlideBoxDelegate.enableSlide(false);
+  };
+  
+  
+  
+})
 .controller('MapCtrl', function($scope,$http, $ionicLoading, $compile) {
     $scope.currenttitle = "yo";
     $scope.currentcardcontent = 'you cant see me';
