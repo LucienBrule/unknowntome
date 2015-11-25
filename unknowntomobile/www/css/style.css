@@ -1,9 +1,63 @@
+.yellow{
+    background-color:#b58900;
+}
+.orange{
+    background-color:#cb4b16;
+}
+.red{
+    background-color:#dc322f;
+}
+.magenta{
+    background-color:#d33682;
+}
+.violet{
+    background-color:#6c71c4;
+}
+.blue{
+    background-color:#268bd2;
+}
+.cyan{
+    background-color:#2aa198;
+}
+.green{
+    background-color:#859900;
+}
+.base0{
+    background-color:#839496;
+}
+.base1{
+    background-color:#93a1a1;
+}
+.base2{
+    background-color:#eee8d5;
+}
+.base3{
+    background-color:#fdf6e3;
+}
+.base00{
+    background-color:#657b83;
+}
+.base01{
+    background-color:#586e75;
+}
+.base02{
+    background-color:#073642;
+}
+.base03{
+    background-color:#002b36;
+}
+.lightextfield{
+    background-color:#93a1a1;
+}
 .slider {
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
+}
+.slider-pager{
+    visibility: hidden;
 }
 .box{
   text-align: center;
@@ -49,15 +103,18 @@
 	bottom: 20;
 }
 #filterbardiv{
+    z-index: 1000 !important;
 	position: absolute;
 	left:0px;
 	bottom: 0px;
 	width:100%;
 }
 #addForm {
-	position: absolute;
-	top: 50px;
-	width: 100%;
+    position: absolute;
+    top: 50px;
+    bottom: 0px;
+    width: 100%;
+    height: 100%;
 }
 #descr {
 	height: 100%;
@@ -72,8 +129,22 @@
 	margin-right:auto;
 	color: #657b83;
 }
-#titletext:{
+#titletext{
 	width: 100%;
 	height: 50px;
 	margin: auto;
+}
+#specialaccesstoggle{
+    position: fixed;
+    bottom: 0px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+#submittype{
+    position: fixed;
+    bottom: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
 }
