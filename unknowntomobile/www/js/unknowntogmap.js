@@ -1,6 +1,11 @@
 angular.module('unknownto', ['ionic','ngCordova'])
 .controller('SlideBoxCtrl', function($scope, $timeout, $ionicSlideBoxDelegate){
-  
+$scope.$on('submitsuccess', function(event) {
+    console.log('event received: submitsuccess');
+    // $scope.logtoinfobox('Submit Success!');
+    $scope.previous()}
+    );
+
   $timeout(function(){
     $ionicSlideBoxDelegate.enableSlide(true); 
   });
@@ -41,7 +46,7 @@ angular.module('unknownto', ['ionic','ngCordova'])
   // ];
     $scope.updatetype = function(item) {
             console.log( 'selected: ' + item.value );
-            $scope.type = item.value
+            $scope.type = item.value;
         }
     $scope.clickSubmit = function(){
         console.log('submit clicked...');
@@ -51,34 +56,44 @@ angular.module('unknownto', ['ionic','ngCordova'])
         var posOptions = {timeout: 10000, enableHighAccuracy: false};
         $cordovaGeolocation
             .getCurrentPosition(posOptions)
-            .then(function (position) {
-                var lati  = position.coords.latitude
+            .then(function (position)  {
+
+              var lati  = position.coords.latitude
                 var longi = position.coords.longitude
-                coords = "" + lati + "" + longi
+                console.log(lati,longi);
+                coords = lati.toString() + "," +longi.toString()
+                console.log('geoloc is'  + coords );
+                $scope.data.geoloc = coords;
+                var serializeddata = $httpParamSerializer($scope.data);
+                console.log('url encoded data is ' + serializeddata);
+                qstring = $scope.type + '?' + serializeddata;
+                console.log('querystring is:' + qstring);
+                $http.get("https://unknownto.me/api/" + qstring)
+                    .success(function(data) {
+                        console.log('Submit succesful')
+                        console.log(data)
+                    })
+                    .error(function(data){
+                        console.log('submit failed')
+                        console.log(data);
+                    })
+                console.log('emmitting event submitsuccess...');
+                $scope.$emit('submitsuccess');
+
             }, function(err) {
               // error
-            });        console.log('geoloc is'  + coords );
-        var serializeddata = $httpParamSerializer($scope.data);
-        console.log('url encoded data is ' + serializeddata);
-        qstring = $scope.type + '?' + serializeddata;
-        console.log('querystring is:' + qstring);
-        // $http.get("https://unknownto.me/api/" + qstring)
-        //     .success(function(data) {
-        //         console.log('Submit succesful')
-        //         console.log(data)
-        //     })
-        //     .error(function(data){
-        //         console.log('submit failed')
-        //         console.log(data);
-        //     })
+            });
     }
+
     $scope.updatespecialaccess = function(){
         $scope.data.specialaccess = ! $scope.data.specialaccess;
         console.log('special acces' + $scope.data.specialaccess);
     }
+
     $scope.updatedescription = function(){
         console.log(' sdd: ' + $scope.data.description);
     }
+
     $scope.updatetitle = function(){
         console.log(' sdt: ' + $scope.data.submittitle);
     }
@@ -88,7 +103,9 @@ angular.module('unknownto', ['ionic','ngCordova'])
     $scope.currentcardcontent = 'you cant see me';
     $scope.googLatLng;
     $scope.googLatLngRpi = google.maps.LatLng(42.729145699999995,-73.677779999999);    $scope.map
-
+    $scope.$on('submitsuccess', function(event) {
+        $scope.logtoinfobox('Submit Success!');
+    });
     $scope.getLatLng = function(){
         var posOptions = {timeout: 10000, enableHighAccuracy: false};
         $cordovaGeolocation
