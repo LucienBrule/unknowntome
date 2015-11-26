@@ -1,4 +1,4 @@
-angular.module('unknownto', ['ionic'])
+angular.module('unknownto', ['ionic','ngCordova'])
 .controller('SlideBoxCtrl', function($scope, $timeout, $ionicSlideBoxDelegate){
   
   $timeout(function(){
@@ -20,7 +20,7 @@ angular.module('unknownto', ['ionic'])
   
   
 })
-.controller('SubmiCtrl', function($http,$httpParamSerializer,$scope, $window, $ionicPlatform) {
+.controller('SubmiCtrl', function($cordovaGeolocation,$http,$httpParamSerializer,$scope, $window, $ionicPlatform) {
     $scope.type = 'fillme'
     $scope.data = [];
     $scope.tggl;
@@ -47,19 +47,30 @@ angular.module('unknownto', ['ionic'])
         console.log('submit clicked...');
         console.log('type is: ' + $scope.type);
         console.log('raw data is: '+ $scope.data);
-        serializeddata = $httpParamSerializer($scope.data);
+        var coords;
+        var posOptions = {timeout: 10000, enableHighAccuracy: false};
+        $cordovaGeolocation
+            .getCurrentPosition(posOptions)
+            .then(function (position) {
+                var lati  = position.coords.latitude
+                var longi = position.coords.longitude
+                coords = "" + lati + "" + longi
+            }, function(err) {
+              // error
+            });        console.log('geoloc is'  + coords );
+        var serializeddata = $httpParamSerializer($scope.data);
         console.log('url encoded data is ' + serializeddata);
         qstring = $scope.type + '?' + serializeddata;
         console.log('querystring is:' + qstring);
-        $http.get("https://unknownto.me/api/" + qstring)
-            .success(function(data) {
-                console.log('Submit succesful')
-                console.log(data)
-            })
-            .error(function(data){
-                console.log('submit failed')
-                console.log(data);
-            })
+        // $http.get("https://unknownto.me/api/" + qstring)
+        //     .success(function(data) {
+        //         console.log('Submit succesful')
+        //         console.log(data)
+        //     })
+        //     .error(function(data){
+        //         console.log('submit failed')
+        //         console.log(data);
+        //     })
     }
     $scope.updatespecialaccess = function(){
         $scope.data.specialaccess = ! $scope.data.specialaccess;
@@ -72,14 +83,40 @@ angular.module('unknownto', ['ionic'])
         console.log(' sdt: ' + $scope.data.submittitle);
     }
 })
-.controller('MapCtrl', function($scope,$http, $ionicLoading, $compile) {
+.controller('MapCtrl', function($cordovaGeolocation,$scope,$http, $ionicLoading, $compile) {
     $scope.currenttitle = "yo";
     $scope.currentcardcontent = 'you cant see me';
+    $scope.googLatLng;
+    $scope.googLatLngRpi = google.maps.LatLng(42.729145699999995,-73.677779999999);    $scope.map
+
+    $scope.getLatLng = function(){
+        var posOptions = {timeout: 10000, enableHighAccuracy: false};
+        $cordovaGeolocation
+        .getCurrentPosition(posOptions)
+        .then(function (position) {
+            var lati  = position.coords.latitude;
+            var longi = position.coords.longitude;
+            console.log('lati ' + lati,'longi ' + longi);
+            $scope.googLatLng = new google.maps.LatLng(lati,longi);
+        }, function(err) {
+            console.log('Error getting location');
+            console.log(err);
+            $scope.googLatLng = new google.maps.LatLng(42.7301729, -73.6875558);
+
+        });
+    }
     $scope.initmap  = function(){
         console.log("initialize")
+        $scope.loading = $ionicLoading.show({
+          content: 'Initializing map...',
+          showBackdrop: true
+        });
         document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap base3'>initialize</div>";
 
-        var latLng = new google.maps.LatLng(42.7301729, -73.6875558);
+        // var latLng = new google.maps.LatLng(42.7301729, -73.6875558); // location of RPI
+        var latLng = $scope.googLatLng;
+        var latLng = $scope.getLatLng();
+        $scope.logtoinfobox('loading styles')
         var styles = [
     {
         "featureType": "all",
@@ -445,8 +482,7 @@ angular.module('unknownto', ['ionic'])
         ]
     }
 ];
-document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap base3'>loaded styles</div>";
-
+        $scope.logtoinfobox('styles loaded');
         // var styles = [{
         //     stylers: [{
         //         hue: "#c0392b"
@@ -482,55 +518,46 @@ document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='
                 mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'map_style']
             }
         };
-document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap base3'>midlemap</div>";
-
-        var map = new google.maps.Map(document.getElementById('map'),
+        $scope.logtoinfobox('Setting up the map...')
+        $scope.map = new google.maps.Map(document.getElementById('map'),
             myOptions);
-        map.mapTypes.set('map_style', styledMap);
-        map.setMapTypeId('map_style');
+        $scope.map.mapTypes.set('map_style', styledMap);
+        $scope.map.setMapTypeId('map_style');
         initialLocation = new google.maps.LatLng(42.729145699999995,-73.677779999999);
-        map.setCenter(initialLocation);
-document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap base3'>Loading data..</div>";
-
+        $scope.map.setCenter(initialLocation);
+        $scope.logtoinfobox('loading data');
         $http.get("https://unknownto.me/api/quirks/all")
             .success(function(data) {
-document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap base3'>request success</div>";
-
+                $scope.logtoinfobox('succesfully requested quirks');
                 console.log("data",data);$scope.putOnMap(data);
-document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap base3'>Loaded quriks</div>";
-
+        $scope.logtoinfobox('loaded quirks');
         });
         $http.get("https://unknownto.me/api/parkingspots/all")
             .success(function(data) {
-document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap base3'>loaded parkingspots</div>";
-
+        $scope.logtoinfobox('loaded parkingspots');
                 console.log("data",data);$scope.putParkingOnMap(data);});
         $http.get("https://unknownto.me/api/bathrooms/all")
             .success(function(data) {
-document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap base3'>loaded bathrooms</div>";
-
+        $scope.logtoinfobox('loaded bathrooms');
                 console.log("data",data);$scope.putOnMap(data);});
         $http.get("https://unknownto.me/api/waterfountains/all")
             .success(function(data) {
-document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap base3'>loaded waterfountains</div>";
-
+        $scope.logtoinfobox('loaded waterfountains');
                 console.log("data",data);$scope.putOnMap(data);})
 // .finally(function() {
 // document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap base3'>setting map`</div>";
 //         $scope.map = map;
 // document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap base3'>map set</div>";
 // });
-document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap base3'>setting map`</div>";
-        $scope.map = map;
-document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap base3'>map set</div>";
-document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap base3'>This is also cool</div>";
 
+        $scope.logtoinfobox('This is cool');
 //         $http.get("https://unknownto.me/api/meetinglocations/all")
 //             .success(function(data) {
 // document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap base3'>meetinglocations</div>";
 
 //                 console.log("data",data);$scope.putOnMap(data);
 //             });
+       $scope.loading = $ionicLoading.hide();
 }
 
     $scope.putParkingOnMap = function(json) {
@@ -560,14 +587,14 @@ document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='
     }
 
     $scope.putOnMap = function(json) {
-        /** FIX for Bootstrap and Google Maps Info window styes problem **/
-        var css = document.createElement('style');
-        css.type = 'text/css';
-        var styles = 'img[src*="gstatic.com/"], img[src*="googleapis.com/"] { max-width: none; }';
-        if (css.styleSheet) css.styleSheet.cssText = styles;
-        else css.appendChild(document.createTextNode(styles));
-        document.getElementsByTagName("head")[0].appendChild(css);
-        //~fix
+        // /** FIX for Bootstrap and Google Maps Info window styes problem **/
+        // var css = document.createElement('style');
+        // css.type = 'text/css';
+        // var styles = 'img[src*="gstatic.com/"], img[src*="googleapis.com/"] { max-width: none; }';
+        // if (css.styleSheet) css.styleSheet.cssText = styles;
+        // else css.appendChild(document.createTextNode(styles));
+        // document.getElementsByTagName("head")[0].appendChild(css);
+        // //~fix
 
         for (i = 0; i < json.length; i++) {
             if (json[i] == 'undefined') {
@@ -628,16 +655,14 @@ document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='
                 // infoWindow.setContent(this.info);
                 // $compile(infowindow.content)($scope);
                 // infoWindow.open($scope.map, this);
-                document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap base3'>"+this.info+"</div>";
-                $scope.carddisplay = 'visible'
+                $scope.logtoinfobox(this.info);
+                $scope.carddisplay = 'visible';
                 $scope.map.setCenter(marker.latLng);
             });
         }
     }
     $scope.centerOnMe = function() {
-document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap base3'>Center on me</div>";
-
-        $scope.currentcardcontent = "Nigga we moving!";
+        $scope.logtoinfobox("Center on me");
         console.log("CenterOnMe")
         if(!$scope.map) {
           return;
@@ -645,24 +670,57 @@ document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='
 
         $scope.loading = $ionicLoading.show({
           content: 'Getting current location...',
-          showBackdrop: false
+          showBackdrop: true
         });
+        var marker = new google.maps.Marker({
+                position: $scope.googLatLng,
+                icon: {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    scale: 5,
+                    strokeWeight: 1,
+                    fillColor: '#0099FF',
+                    fillOpacity: 0.5
+                },
+                map: $scope.map,
+                animation: google.maps.Animation.DROP
+            });
 
-          $scope.map.setCenter(new google.maps.LatLng(42.729145699999995,-73.677779999999));
-          $scope.loading.hide();
+        $scope.map.setCenter($scope.googLatLng)
+        $scope.loading = $ionicLoading.hide();
+
+    }
+    $scope.centerOnRPI = function(){
+        console.log("CenterOnRPI");
+        if(!$scope.map) {
+          return;
+        }
+
+        $scope.loading = $ionicLoading.show({
+          content: 'Going to RPI...',
+          showBackdrop: true
+        });
+        
+        initialLocation = new google.maps.LatLng(42.729145699999995,-73.677779999999);
+        $scope.map.setCenter(initialLocation);
+        $scope.loading = $ionicLoading.hide();
+
     }
     $scope.checkconnection = function(){
-$http.get('https://unknownto.me')
-    .success(function(data) {
-document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap base3'>Internet works</div>";
-
-})
-.error(function(data, status) {
-    document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap base3'> ERROR" +responce + "</div>";
-});
+        $http.get('https://unknownto.me')
+            .success(function(data,status) {
+            $scope.logtoinfobox('Internet Works',status);
+        })
+        .error(function(data, status) {
+            $scope.logtoinfobox(status,data)
+        });
     }
       
     $scope.clickTest = function(color) {
-    document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap base3' style ='background:"+color+"'> Clicked a button</div>";
+        document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap base3' style ='background:"+color+"'> Clicked a button</div>";
+        $scope.logtoinfobox('Hello, World!')
       };
+
+    $scope.logtoinfobox = function(messege){
+        document.getElementById("infocontainer").innerHTML = "<div id='infocard' class='item item-text-wrap base3' style ='background:base3+'>"+messege +"</div>";
+    }
 }); //end of controller

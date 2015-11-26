@@ -7,10 +7,10 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
     <link href="lib/ionic/css/ionic.css" rel="stylesheet">
     <script src="lib/ionic/js/ionic.bundle.js"></script>
-    <script src="/js/ionic.swipecards.js"></script>
     <!-- google maps javascript -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB16sGmIekuGIvYOfNoW9T44377IU2d2Es&sensor=true"></script>
     <link href="css/style.css" rel="stylesheet">
+    <script src="lib/ngCordova/dist/ng-cordova.js"></script>
     <script src="js/unknowntogmap.js"></script>
     <script src="cordova.js"></script>
 </head>
@@ -34,7 +34,8 @@
                         </div>
                         <div id="locatebar" class="bar bar-subfooter base2">
                             <button ng-click="centerOnMe()" class="button button-icon icon ion-navigate">Find Me</button>
-                            <h2 class="title">Sub Header</h2>
+                            <h2 class="title"> UKN2Mobile 'BETA' 0.2.0</h2>
+                            <button ng-click="centerOnRPI()" class="button button-icon icon ion-navigate">Goto RPI</button>
                         </div>
                         <div id="filterbardiv">
                             <div class="button-bar">
