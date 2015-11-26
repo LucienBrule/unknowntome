@@ -20,11 +20,15 @@ angular.module('unknownto', ['ionic'])
   
   
 })
-.controller('SubmiCtrl', function($scope, $window, $ionicPlatform) {
-    $scope.data = {};
-    $scope.data.submittype = 'quirk';
-    $scope.data.submittitle = 'title';
-    $scope.data.submitdescr = 'descr';
+.controller('SubmiCtrl', function($http,$httpParamSerializer,$scope, $window, $ionicPlatform) {
+    $scope.type = 'fillme'
+    $scope.data = [];
+    $scope.tggl;
+    $scope.data.type = 'quirk';
+    $scope.data.title = 'title';
+    $scope.data.description = 'description';
+    $scope.data.specialaccess = false;
+    $scope.data.geoloc = '34.180673,-118.276361';
 
     $scope.submittypes = [
         { text: "quirk", value: "quirk" },
@@ -32,15 +36,40 @@ angular.module('unknownto', ['ionic'])
         { text: "water", value: "waterfountain" },
         { text: "mtg", value: "meetinglocation" }
         ];
+  //   $scope.settingsList = [
+  //   { text: "Special Access", checked: false },
+  // ];
     $scope.updatetype = function(item) {
-          // $window.localStorage.setItem( 'grossoption', item.value );
-            console.log( 'slected: ' + item.value );
-            $scope.data.submittype = item.value
+            console.log( 'selected: ' + item.value );
+            $scope.type = item.value
         }
     $scope.clickSubmit = function(){
         console.log('submit clicked...');
-        console.log($scope.data.submittype);
-        console.log('\t');
+        console.log('type is: ' + $scope.type);
+        console.log('raw data is: '+ $scope.data);
+        serializeddata = $httpParamSerializer($scope.data);
+        console.log('url encoded data is ' + serializeddata);
+        qstring = $scope.type + '?' + serializeddata;
+        console.log('querystring is:' + qstring);
+        $http.get("https://unknownto.me/api/" + qstring)
+            .success(function(data) {
+                console.log('Submit succesful')
+                console.log(data)
+            })
+            .error(function(data){
+                console.log('submit failed')
+                console.log(data);
+            })
+    }
+    $scope.updatespecialaccess = function(){
+        $scope.data.specialaccess = ! $scope.data.specialaccess;
+        console.log('special acces' + $scope.data.specialaccess);
+    }
+    $scope.updatedescription = function(){
+        console.log(' sdd: ' + $scope.data.description);
+    }
+    $scope.updatetitle = function(){
+        console.log(' sdt: ' + $scope.data.submittitle);
     }
 })
 .controller('MapCtrl', function($scope,$http, $ionicLoading, $compile) {

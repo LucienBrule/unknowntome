@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Unknown To</title>
+    <link rel="shortcut icon" href="img/favicon-map-marker.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/unknownto.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <style type="text/css">
+/** FIX for Bootstrap and Google Maps Info window styes problem */
+img[src="gstatic.com/"], img[src*="googleapis.com/"] {
+max-width: none;
+}
+</style>
+
+</head>
+
+<body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
+                    <i class="fa fa-bars"></i>
+                </button>
+                <a class="navbar-brand page-scroll" href="#page-top">
+                    <i class="fa fa-map-pin"></i>  <span class="light">Unknown To</span>
+                </a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
+                <ul class="nav navbar-nav">
+                    <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
+                    <li>
+                        <a class="page-scroll" href="#content">Add</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Map Section -->
+    <a class="anchor" id="maptop">
+        <section id="map">
+            <div id="map"></div>
+        </section>
+    </a>
+
+     <div data-role="content">  
+          <div id = "content">
+                <center><div class="mobileSubmit">
+                <div class="formview">
+              <form action="">
+                <br>
+                    <td>
+                      <input type="radio" name="dtype" value="quirk"/>Quirk</label>
+                      <label><input type="radio" name="dtype" value="waterfountain"/>Water Fountiain</label>
+                      <label><input type="radio" name="dtype" value="widget"/>Vending Machine</label>
+                      <label><input type="radio" name="dtype" value="bathroom"/>Bathroom</label><br>
+                    </td>
+                  </div>
+                  <input type="text" name = "Ftitle" placeholder = "title"/>
+                  <input type="text" name = "Fdescription" placeholder = "description"/>
+                  <input type="number" name = "Fsentiment"placeholder = "sentiment"/><br>
+                <input type = "button" id = "submitbutton" value= "Submit" onclick="updaterecord()"/>
+             </form>
+             <div id = "locationdiv">
+             </div>
+            </div></center>
+    </div><!-- /content -->   
+
+    <!-- Footer -->
+    <footer>
+        <div class="container text-center">
+            <p>Made with <span style="color:#e74c3c;">&hearts;</span> for Hack RPI 2015</p>
+            <p style = "font-size: 10px">Jonathan Caicedo, Lucien Brulé, Candy Zhang, Cameron Hackett, Max Wang</p>
+        </div>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="js/jquery.easing.min.js"></script>
+
+   <script type = "text/javascript">
+    var globaluserlocation;
+    function init() {
+        console.log("The page loaded!");
+        initialize();
+        document.getElementById("submitbutton").addEventListener("touchend",updaterecord,false)
+        // $("div.locationdiv").html("<p>" + globaluserlocation.coords.latitude + "," + globaluserlocation.coords.longitude + "</p>");
+    }
+
+    function updaterecord(){
+        console.log("Updating record...");
+        var lati = globaluserlocation.coords.latitude;
+        var logi = globaluserlocation.coords.longitude;
+        console.log(lati);
+        console.log(logi);
+       
+        
+        var type = encodeURIComponent($('input[name="dtype"]:checked').val());
+        var title = encodeURIComponent($('input[name="Ftitle"]').val());
+        var descr = encodeURIComponent($('input[name="Fdescription"]').val());
+        // var lat = $('input[name="Flat"]').val();
+        // // var lng = $(lati).val();
+        // var sent = $(logi).val();
+        console.log("https://unknownto.me/api/" + type + "?"+ "title=" + title +"&geoloc="+lati+","+logi+"&description="+descr);
+
+        $.get("https://unknownto.me/api/" + type + "?"+ "title=" + title +"&geoloc="+lati+","+logi+"&description="+descr, function(data) {
+            putOnMap(data);
+        });
+    }
+
+    function initialize() {
+        var latLng = new google.maps.LatLng(0, 0);
+        var styles = [{
+            stylers: [{
+                hue: "#c0392b"
+            }, {
+                saturation: 5
+            }]
+        }, {
+            featureType: "road",
+            elementType: "geometry",
+            stylers: [{
+                lightness: 100
+            }, {
+                visibility: "simplified"
+            }]
+        }, {
+            featureType: "road",
+            elementType: "labels",
+            stylers: [{
+                visibility: "off"
+            }]
+        }];
+
+        var styledMap = new google.maps.StyledMapType(styles, {
+            name: "Styled Map"
+        });
+
+        var map = new google.maps.StyledMapType(document.getElementById("map"), myOptions);
+        var myOptions = {
+            center: latLng,
+            zoom: 16,
+            maxZoom: 20,
+            mapTypeControlOptions: {
+                mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'map_style']
+            }
+        };
+        var map = new google.maps.Map(document.getElementById('map'),
+            myOptions);
+        map.mapTypes.set('map_style', styledMap);
+        map.setMapTypeId('map_style');
+        // Try W3C Geolocation (Preferred)
+        if (navigator.geolocation) {
+            browserSupportFlag = true;
+            navigator.geolocation.getCurrentPosition(function(position) {
+                initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                map.setCenter(initialLocation);
+                globaluserlocation = position;
+            }, function() {
+                handleNoGeolocation(browserSupportFlag);
+            });
+        } else {
+            // Browser doesn't support Geolocation
+            alert("Please enable your location");
+        }
+
+
+        $.getJSON("https://unknownto.me/api/quirks/all", function(data) {
+            putOnMap(data);
+        });
+        $.getJSON("https://unknownto.me/api/parkingspots/all", function(data) {
+            putParkingOnMap(data);
+        });
+        $.getJSON("https://unknownto.me/api/bathrooms/all", function(data) {
+            putOnMap(data);
+        });
+        $.getJSON("https://unknownto.me/api/waterfountains/all", function(data) {
+            putOnMap(data);
+        });
+        $.getJSON("https://unknownto.me/api/meetinglocations/all", function(data) {
+            putOnMap(data);
+        });
+    
+
+        function putParkingOnMap(json) {
+            for (i = 0; i < json.length; i++) {
+                var location = json[i].start.toString().split(',')
+                var latitude1 = +location[0].toString();
+                var longitude1 = +location[1].toString();
+                var location = json[i].stop.toString().split(',')
+                var latitude2 = +location[0].toString();
+                var longitude2 = +location[1].toString();
+                var linepoints = [{
+                    lat: latitude1,
+                    lng: longitude1
+                }, {
+                    lat: latitude2,
+                    lng: longitude2
+                }];
+                var parkingline = new google.maps.Polyline({
+                    path: linepoints,
+                    geodesic: true,
+                    strokeColor: '#FF0000',
+                    strokeOpacity: 1.0,
+                    strokeWeight: 3
+                });
+                parkingline.setMap(map)
+            }
+        }
+
+        function putOnMap(json) {
+          /** FIX for Bootstrap and Google Maps Info window styes problem **/
+ var css = document.createElement('style');
+ css.type = 'text/css';
+ var styles = 'img[src*="gstatic.com/"], img[src*="googleapis.com/"] { max-width: none; }';
+ if (css.styleSheet) css.styleSheet.cssText = styles;
+ else css.appendChild(document.createTextNode(styles));
+ document.getElementsByTagName("head")[0].appendChild(css);
+            for (i = 0; i < json.length; i++) {
+                if(json[i] == 'undefined'){ continue;}
+                var location = json[i].geoloc.toString().split(',');
+                var latitude = +location[0].toString();
+                var longitude = +location[1].toString();
+                var c = "fillme";
+                if (json[i].title != 'undefined') {
+                    if (json[i].description != 'undefined') {
+                        c = "<b>" + json[i].title.toString() + "</b><br><center><p style=\"width:12em;\">" + json[i].description.toString() + "</p><center>"
+                        infoWindow = new google.maps.InfoWindow({
+                            content: c
+                        });
+                    } else {
+                        c = json[i].title.toString()
+                        infoWindow = new google.maps.InfoWindow({
+                            content: c
+                        });
+
+                    }
+                } else {
+                    c = "?";
+                    infoWindow = new google.maps.InfoWindow({
+                        content: c
+                    });
+                }
+                var marker = new google.maps.Marker({
+                    position: {
+                        lat: latitude,
+                        lng: longitude
+                    },
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 5,
+                        strokeWeight: 1,
+                        fillColor: 'red',
+                        fillOpacity: 0.2
+                    },
+                    map: map,
+                    info: c,
+                    animation: google.maps.Animation.DROP
+                });
+
+                marker.addListener('click', function() {
+                    if (marker.getAnimation() !== null) {
+                        marker.setAnimation(null);
+                    } else {
+                        marker.setAnimation(google.maps.Animation.BOUNCE);
+                        setTimeout(function(){ marker.setAnimation(null); }, 300);
+
+                    }
+                });
+                google.maps.event.addListener(marker, 'click', function(marker) {
+                        infoWindow.setContent(this.info);
+                        infoWindow.open(map, this);
+                        map.panTo(marker.latLng);
+                });
+            }
+        }
+    }
+</script>
+
+    <!-- Google Maps API Key - Use your own API key to enable the map feature. More information on the Google Maps API can be found at https://developers.google.com/maps/ -->
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&callback=initialize"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="js/unknownto.js"></script>
+
+</body>
+
+</html>
+
+
+<script type = "text/javascript">
+    var globaluserlocation;
+    function init() {
+        console.log("The page loaded!");
+        initialize();
+        document.getElementById("submitbutton").addEventListener("touchend",updaterecord,false)
+        // $("div.locationdiv").html("<p>" + globaluserlocation.coords.latitude + "," + globaluserlocation.coords.longitude + "</p>");
+    }
+
+    function updaterecord(){
+        console.log("Updating record...");
+        var lati = globaluserlocation.coords.latitude;
+        var logi = globaluserlocation.coords.longitude;
+        console.log(lati);
+        console.log(logi);
+       
+        
+        var type = encodeURIComponent($('input[name="dtype"]:checked').val());
+        var title = encodeURIComponent($('input[name="Ftitle"]').val());
+        var descr = encodeURIComponent($('input[name="Fdescription"]').val());
+        // var lat = $('input[name="Flat"]').val();
+        // // var lng = $(lati).val();
+        // var sent = $(logi).val();
+        console.log("https://unknownto.me/api/" + type + "?"+ "title=" + title +"&geoloc="+lati+","+logi+"&description="+descr);
+
+        $.get("https://unknownto.me/api/" + type + "?"+ "title=" + title +"&geoloc="+lati+","+logi+"&description="+descr, function(data) {
+            putOnMap(data);
+        });
+    }
+
+    function initialize() {
+        var latLng = new google.maps.LatLng(0, 0);
+        var styles = [{
+            stylers: [{
+                hue: "#c0392b"
+            }, {
+                saturation: 5
+            }]
+        }, {
+            featureType: "road",
+            elementType: "geometry",
+            stylers: [{
+                lightness: 100
+            }, {
+                visibility: "simplified"
+            }]
+        }, {
+            featureType: "road",
+            elementType: "labels",
+            stylers: [{
+                visibility: "off"
+            }]
+        }];
+
+        var styledMap = new google.maps.StyledMapType(styles, {
+            name: "Styled Map"
+        });
+
+        var map = new google.maps.StyledMapType(document.getElementById("map"), myOptions);
+        var myOptions = {
+            center: latLng,
+            zoom: 16,
+            maxZoom: 20,
+            mapTypeControlOptions: {
+                mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'map_style']
+            }
+        };
+        var map = new google.maps.Map(document.getElementById('map'),
+            myOptions);
+        map.mapTypes.set('map_style', styledMap);
+        map.setMapTypeId('map_style');
+        // Try W3C Geolocation (Preferred)
+        if (navigator.geolocation) {
+            browserSupportFlag = true;
+            navigator.geolocation.getCurrentPosition(function(position) {
+                initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                map.setCenter(initialLocation);
+                globaluserlocation = position;
+            }, function() {
+                handleNoGeolocation(browserSupportFlag);
+            });
+        } else {
+            // Browser doesn't support Geolocation
+            alert("Please enable your location");
+        }
+
+
+        $.getJSON("https://unknownto.me/api/quirks/all", function(data) {
+            putOnMap(data);
+        });
+        $.getJSON("https://unknownto.me/api/parkingspots/all", function(data) {
+            putParkingOnMap(data);
+        });
+        $.getJSON("https://unknownto.me/api/bathrooms/all", function(data) {
+            putOnMap(data);
+        });
+        $.getJSON("https://unknownto.me/api/waterfountains/all", function(data) {
+            putOnMap(data);
+        });
+        $.getJSON("https://unknownto.me/api/meetinglocations/all", function(data) {
+            putOnMap(data);
+        });
+    
+
+        function putParkingOnMap(json) {
+            for (i = 0; i < json.length; i++) {
+                var location = json[i].start.toString().split(',')
+                var latitude1 = +location[0].toString();
+                var longitude1 = +location[1].toString();
+                var location = json[i].stop.toString().split(',')
+                var latitude2 = +location[0].toString();
+                var longitude2 = +location[1].toString();
+                var linepoints = [{
+                    lat: latitude1,
+                    lng: longitude1
+                }, {
+                    lat: latitude2,
+                    lng: longitude2
+                }];
+                var parkingline = new google.maps.Polyline({
+                    path: linepoints,
+                    geodesic: true,
+                    strokeColor: '#FF0000',
+                    strokeOpacity: 1.0,
+                    strokeWeight: 3
+                });
+                parkingline.setMap(map)
+            }
+        }
+
+        function putOnMap(json) {
+          /** FIX for Bootstrap and Google Maps Info window styes problem **/
+ var css = document.createElement('style');
+ css.type = 'text/css';
+ var styles = 'img[src*="gstatic.com/"], img[src*="googleapis.com/"] { max-width: none; }';
+ if (css.styleSheet) css.styleSheet.cssText = styles;
+ else css.appendChild(document.createTextNode(styles));
+ document.getElementsByTagName("head")[0].appendChild(css);
+            for (i = 0; i < json.length; i++) {
+                if(json[i] == 'undefined'){ continue;}
+                var location = json[i].geoloc.toString().split(',');
+                var latitude = +location[0].toString();
+                var longitude = +location[1].toString();
+                var c = "fillme";
+                if (json[i].title != 'undefined') {
+                    if (json[i].description != 'undefined') {
+                        c = "<b>" + json[i].title.toString() + "</b><br><center><p style=\"width:12em;\">" + json[i].description.toString() + "</p><center>"
+                        infoWindow = new google.maps.InfoWindow({
+                            content: c
+                        });
+                    } else {
+                        c = json[i].title.toString()
+                        infoWindow = new google.maps.InfoWindow({
+                            content: c
+                        });
+
+                    }
+                } else {
+                    c = "?";
+                    infoWindow = new google.maps.InfoWindow({
+                        content: c
+                    });
+                }
+                var marker = new google.maps.Marker({
+                    position: {
+                        lat: latitude,
+                        lng: longitude
+                    },
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 5,
+                        strokeWeight: 1,
+                        fillColor: 'red',
+                        fillOpacity: 0.2
+                    },
+                    map: map,
+                    info: c,
+                    animation: google.maps.Animation.DROP
+                });
+
+                marker.addListener('click', function() {
+                    if (marker.getAnimation() !== null) {
+                        marker.setAnimation(null);
+                    } else {
+                        marker.setAnimation(google.maps.Animation.BOUNCE);
+                        setTimeout(function(){ marker.setAnimation(null); }, 300);
+
+                    }
+                });
+                google.maps.event.addListener(marker, 'click', function(marker) {
+                        infoWindow.setContent(this.info);
+                        infoWindow.open(map, this);
+                        map.panTo(marker.latLng);
+                });
+            }
+        }
+    }
+</script>
+</html>

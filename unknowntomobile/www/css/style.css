@@ -57,7 +57,11 @@
   right: 0;
 }
 .slider-pager{
-    visibility: hidden;
+  position: fixed;
+  z-index: 10;
+  top: 0px;
+  visibility: visible;
+  height: 0px;
 }
 .box{
   text-align: center;
@@ -130,7 +134,9 @@
 	color: #657b83;
 }
 #titletext{
+  position: relative;
 	width: 100%;
+  top:100px;
 	height: 50px;
 	margin: auto;
 }
@@ -138,8 +144,10 @@
     position: fixed;
     bottom: 0px;
     margin-left: auto;
+    background-color: red;
     margin-right: auto;
     width: 100%;
+    z-index: 11;
 }
 #submittype{
     position: fixed;
@@ -147,4 +155,13 @@
     margin-left: auto;
     margin-right: auto;
     width: 100%;
+}
+#submitviewdiv{
+  position: fixed;
+  width:100%;
+  top:45px;
+}
+#addformheader{
+  position: fixed;
+  top: 0px;
 }
