@@ -31,6 +31,12 @@
 <allow-intent href="sms:*" />
 <allow-intent href="mailto:*" />
 <allow-intent href="geo:*" />
+<feature name="Geolocation">
+    <param name="ios-package" value="CDVLocation" />
+</feature>
+<feature name="Geolocation">
+    <param name="android-package" value="org.apache.cordova.geolocation.GeoBroker" />
+</feature>
 <platform name="android">
     <allow-intent href="market:*" />
 </platform>

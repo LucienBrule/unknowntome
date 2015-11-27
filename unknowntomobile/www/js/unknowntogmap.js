@@ -118,6 +118,7 @@ $scope.$on('submitsuccess', function(event) {
         }, function(err) {
             console.log('Error getting location');
             console.log(err);
+            logtoinfobox(err);
             $scope.googLatLng = new google.maps.LatLng(42.7301729, -73.6875558);
 
         });
