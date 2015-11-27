@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Map</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+    <!-- google maps javascript -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB16sGmIekuGIvYOfNoW9T44377IU2d2Es&sensor=true"></script>
+    <link href="css/style.css" rel="stylesheet">
+    <script src="lib/ngCordova/dist/ng-cordova.js"></script>
+    <script src="js/unknowntogmap.js"></script>
+    <script src="cordova.js"></script>
+</head>
+
+<body ng-app='unknownto' ng-controller='SlideBoxCtrl'>
+    <!-- <ion-content> -->
+    <ion-view>
+        <ion-slide-box ng-init="disableSwipe()">
+            <ion-slide>
+                <ion-content>
+                    <ion-header-bar class="bar-dark">
+                        <h1 class="title">UnknownTo</h1>
+                        <button ng-click="next()" class="button button-positive">ADD</button>
+                    </ion-header-bar>
+                    <!-- <div class="box blue"> -->
+                    <!-- </div> -->
+                    <div id="mapviewdiv" ng-controller="MapCtrl" ng-init='initmap()'>
+                        <div id="map" data-tap-disabled="true"></div>
+                        <div id="infocontainer">
+                            <div id='infocard' class='item item-text-wrap base3'></div>
+                        </div>
+                        <div id="locatebar" class="bar bar-subfooter base2">
+                            <button ng-click="centerOnMe()" class="button button-icon icon ion-navigate">Find Me</button>
+                            <h2 class="title"> UKN2Mobile 'BETA' 0.2.0</h2>
+                            <button ng-click="centerOnRPI()" class="button button-icon icon ion-navigate">Goto RPI</button>
+                        </div>
+                        <div id="filterbardiv">
+                            <div class="button-bar">
+                                <button class="button magenta" ng-click="clickTest('red')">Q</button>
+                                <button class="button cyan" ng-click="clickTest('yellow')">B</button>
+                                <button class="button violet" ng-click="clickTest('green')">W</button>
+                                <button class="button blue" ng-click="checkconnection()">CHK</button>
+                                <button class="button green" ng-click="initmap()">RLD</button>
+                            </div>
+                        </div>
+                    </div>
+                </ion-content>
+            </ion-slide>
+            <ion-slide>
+                <ion-content>
+                    <div id="addForm" ng-controller='SubmiCtrl'>
+                        <div id="addformheader" class="bar bar-header bar-dark">
+                            <button ng-click="previous()" class="button button-positive">Back</button>
+                            <h1 class="title">UnknownTO</h1>
+                            <button class="button button-positive" ng-click="clickSubmit()">
+                                Submit
+                            </button>
+                        </div>
+                        <div id='submitviewdiv' class="box backhigh">
+                            <div id='titleinput' class="list list-inset backgr">
+                                <label class="item item-input backgr">
+                                    <input type="text" placeholder="Title" ng-model="data.title" ng-change="updatetitle()">
+                                </label>
+                            </div>
+                            <div id='descriptionbox' class="list list-inset">
+                                <label class="item item-input backgr" id="descriptionbox backgr">
+                                    <input id='descriptionbox' type="text" placeholder="Description" ng-model="data.description" ng-change="updatedescription()">
+                                </label>
+                            </div>
+                            <div id='bottongroup'>
+                                <div id='submittype' class="button-bar list">
+                                    <ion-radio ng-repeat="item in submittypes" ng-value="item.value" ng-model="type" ng-change="updatetype(item)" class="button button-positive button-outline" name="radio1">
+                                        {{ item.text }}
+                                    </ion-radio>
+                                </div>
+                                 <li id='specialaccesstoggle' class="item item-toggle backgr">
+                                    Special Access
+                                    <label class="toggle toggle-assertive">
+                                        <input type="checkbox"  ng-model="tggl" ng-change="updatespecialaccess()">
+                                        <div class="track">
+                                            <div class="handle"></div>
+                                        </div>
+                                    </label>
+                                </li>
+<!--                                 <ion-toggle id='specialaccesstoggle' ng-repeat="item in settingsList" ng-model="item.checked" ng-checked="item.checked">
+                                    {{ item.text }}
+                                </ion-toggle>
+                            </div> -->
+                        </div>
+                    </div>
+                </ion-content>
+            </ion-slide>
+        </ion-slide-box>
+    </ion-view>
+    <!-- </ion-content> -->
+</body>
+
+</html>
